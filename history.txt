@@ -208,3 +208,7 @@ hz = 10;
 Проект переносится в репозиторий F:\GitHub\MKlon2.8
 RAM:   [=         ]  14.8% (used 48460 bytes from 327680 bytes)
 Flash: [==        ]  18.9% (used 1239442 bytes from 6553600 bytes)
+Обновлено:
+  PIO v2.5.5  --> v3.0.0
+  C++         --> v2.0.0
+  

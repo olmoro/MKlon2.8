@@ -1,12 +1,12 @@
 /*
-  project:      MESP32                      -> MKlon2v5a
-  pcb:          eltr_v2.2                   -> MKlon2v5a->              -> MKlon2v7a  -> MKlon2v8
-  pcb:          eltrD21v3.1 -> mcdm.v53     -> no                                     -> v7a
+  project:      MKlon2v5a                               -> MKlon2.8
+  pcb:          MKlon2v5a->               -> MKlon2v7a  -> MKlon2v8
+  pcb:          no                                      -> v7a
   display:      128*160 IC: ST7735
   driver:       SAMD21 M0 MINI
-  date:         2022 август                 -> 2022 декабрь  -> 2022    -> 20220126   -> 20220227
-  C/C++:        1.13.7                      -> 1.13.8       -> 1.13.9
-  VS:           1.67.2 -> 1.68.0 -> 1.70.0  -> 1.74.0       -> 1.74.2   -> 1.74.3     -> 1.75.0
+  date:         2022 декабрь              -> 20220126   -> 20220227
+  C/C++:                                  -> 1.13.9     -> 2.0.0
+  VS:                                     -> 1.74.3     -> 1.75.0
   Espressif 32: 3.5.0 (с 4.0 не совместимо) -> 3.5.0
 */
 
