@@ -1,0 +1,189 @@
+/*
+  Методы работы с аппаратными ресурсами платы
+  pcb: eltr_v2.3
+  2021 март, 202207
+*/
+
+#include <PCF8574.h>
+#include <Wire.h>
+#include "board/mboard.h"
+#include "board/mpins.h"
+#include "board/msupervisor.h"
+#include <Arduino.h>
+
+MBoard::MBoard()
+{
+  PCF_38 = new PCF8574(0x38);   // deviceAddress
+	initEsp32();
+  initPCF8574();    // Включая начальную установку
+//  initSD();
+  Supervisor = new MSupervisor(this);
+}
+
+  // Управление светодиодами
+  // Turn the RED LED on
+void MBoard::ledROn()	 { pcfOut &= ~MPins::led_r; PCF_38->write8( pcfOut ); }
+  // Turn the RED LED off
+void MBoard::ledROff() { pcfOut |=  MPins::led_r; PCF_38->write8( pcfOut ); }
+
+  // Turn the GREEN LED on
+void MBoard::ledGOn()	 { pcfOut &= ~MPins::led_g; PCF_38->write8( pcfOut ); }
+  // Turn the GREEN LED off
+void MBoard::ledGOff() { pcfOut |=  MPins::led_g; PCF_38->write8( pcfOut ); }
+
+void MBoard::ledBOn()	 { digitalWrite(MPins::led_b_pin, LOW ); }   // Turn the BLUE LED on
+void MBoard::ledBOff() { digitalWrite(MPins::led_b_pin, HIGH); }   // Turn the BLUE LED off
+
+  // Управление цветом светодиода
+  // Белый
+void MBoard::ledsOn()	    { pcfOut &= ~MPins::led_r;  // led Red On
+                            pcfOut &= ~MPins::led_g;  // led Green On
+                            PCF_38->write8( pcfOut ); 
+                            ledBOn(); }               // led Blue on
+  // Погасить все
+void MBoard::ledsOff()	  { pcfOut |=  MPins::led_r;  // led Red Off
+                            pcfOut |=  MPins::led_g;  // led Green Off
+                            PCF_38->write8( pcfOut );
+                            ledBOff(); }              // led Blue off
+  // Красный
+void MBoard::ledsRed()    { pcfOut &= ~MPins::led_r;  // led Red On
+                            pcfOut |=  MPins::led_g;  // led Green Off
+                            PCF_38->write8( pcfOut );
+                            ledBOff(); }              // led Blue off
+  // Зеленый
+void MBoard::ledsGreen()  { pcfOut &= ~MPins::led_g;  // led Green On
+                            pcfOut |=  MPins::led_r;  // led Red Off
+                            PCF_38->write8( pcfOut );
+                            ledBOff(); }              // led Blue off
+
+  // Синий
+void MBoard::ledsBlue()	  { pcfOut |=  MPins::led_r;  // led Red Off
+                            pcfOut |=  MPins::led_g;  // led Green Off
+                            PCF_38->write8( pcfOut );
+                            ledBOn(); }               // led Blue on                            
+
+  // Желтый 
+void MBoard::ledsYellow() { pcfOut &= ~MPins::led_g;  // led Green On
+                            pcfOut &= ~MPins::led_r;  // led Red On
+                            PCF_38->write8( pcfOut );
+                            ledBOff(); }              // led Blue off
+
+  // Ввести таймер ... в прошлой версии использовался подсчет входов в дисплей
+void MBoard::blinkWhite(short cnt)  { cnt % 10 > 5 ? ledsOn()     : ledsOff(); }
+void MBoard::blinkWhite()
+{
+  static short cnt = 0;
+  cnt++;
+  cnt % 10 > 5 ? ledsOn() : ledsOff(); 
+}
+
+void MBoard::blinkRed(short cnt)    { cnt % 10 > 5 ? ledsRed()    : ledsOff(); }
+void MBoard::blinkGreen(short cnt)  { cnt % 10 > 5 ? ledsGreen()  : ledsOff(); }
+void MBoard::blinkBlue(short cnt)   { cnt % 10 > 5 ? ledsBlue()   : ledsOff(); }
+void MBoard::blinkYellow(short cnt) { cnt % 10 > 5 ? ledsYellow() : ledsOff(); }
+
+  // Управление зуммером
+void MBoard::buzzerOn()	 { pcfOut &= ~MPins::buz; PCF_38->write8( pcfOut ); }
+void MBoard::buzzerOff() { pcfOut |=  MPins::buz; PCF_38->write8( pcfOut ); }
+
+  // Управление подсветкой дисплея
+void MBoard::lcdBlkOn()	 { pcfOut &= ~MPins::blk; PCF_38->write8( pcfOut ); }
+void MBoard::lcdBlkOff() { pcfOut |=  MPins::blk; PCF_38->write8( pcfOut ); }
+
+  // Управление силовыми ключами
+void MBoard::swOn()	     { pcfOut &= ~MPins::sw; PCF_38->write8( pcfOut ); }
+void MBoard::swOff()	   { pcfOut |=  MPins::sw; PCF_38->write8( pcfOut ); }
+
+  // Управление источником
+void MBoard::outOn()	   { pcfOut &= ~MPins::out; PCF_38->write8( pcfOut ); }
+void MBoard::outOff()	   { pcfOut |=  MPins::out; PCF_38->write8( pcfOut ); }
+
+
+  // Вход проверки полярности 
+bool MBoard::getNeg() { return(digitalRead(MPins::pol_pin)); }
+
+  // Вход проверки подачи питания (пока без преобразования в вольты)
+int16_t MBoard::getAdcPG() { return analogRead( MPins::pow_good_pin ); }
+
+  // Вычисление реальной температуры, результат в celsius
+void MBoard::calculateCelsius() { celsius = readSteinhart( analogRead( MPins::celsius_pin ) ); }
+
+float MBoard::getCelsius() { return celsius; }  //30
+
+
+  // Инициализация ресурсов ESP32
+void MBoard::initEsp32() 
+{
+    // ADC - все измерения 12 бит 
+  analogSetWidth(12);                                       //Sets the sample bits and read resolution
+
+    // ADC измерителя температуры
+  adcAttachPin( MPins::celsius_pin );                       // Attach a pin to ADC
+  analogSetPinAttenuation( MPins::celsius_pin, ADC_11db);   // Set the input attenuation
+  
+    // Светодиод синий
+  pinMode( MPins::led_b_pin, OUTPUT_OPEN_DRAIN );
+  ledBOff();
+
+	  // Порт обратной полярности
+	pinMode( MPins::pol_pin, INPUT_PULLUP );
+
+	  // Порт наличия питания (аналоговый)
+  adcAttachPin( MPins::pow_good_pin );                     // Attach a pin to ADC
+  analogSetPinAttenuation( MPins::pow_good_pin, ADC_11db); // Set the input attenuation
+
+    // Порт сброса дисплея
+  //pinMode(MPins::lcd_res_pin, OUTPUT );
+
+	  // Настройка ШИМ вентилятора
+	ledcSetup( ch_fan, 20000, 10);              // канал, частота, разрядность
+	ledcAttachPin( MPins::pwm_fan_pin, ch_fan );
+	ledcWrite( ch_fan, 0x0000 );	// Начальная установка ШИМ в 0. (или лучше в максимум?)
+
+}
+
+// Инициализация ресурсов расширителя выводов
+void MBoard::initPCF8574()
+{
+  pcfOut = 0b11111111;                  // Все в пассивном состоянии
+  PCF_38->begin( MPins::i2c_sda_pin, MPins::i2c_scl_pin, pcfOut);
+}
+
+//   // Инициализация интерфейса карты памяти (HSPI аппаратный)
+// void MBoard::initSD()
+// {
+
+// }
+
+  // Преобразование данных АЦП в напряжение с коррекцией линейности 
+  // https://github.com/G6EJD/ESP32-ADC-Accuracy-Improvement-function/blob/master/ESP32_ADC_Read_Voltage_Accurate.ino
+float MBoard::readVoltage( int adc )
+{
+  // Reference voltage is 3v3 = 4095 in range 0 to 4095
+  if ( adc < 1 || adc >= 4095 ) return 0;
+  const float adc2 = adc  * adc;
+  const float adc3 = adc2 * adc;
+  return -0.000000000000016f * adc3 * adc
+        + 0.000000000118171f * adc3
+        - 0.000000301211691f * adc2
+        + 0.001109019271794f * adc
+        + 0.034143524634089f;
+}
+
+  // Преобразование данных АЦП в градусы цельсия     °С ( Alt+ 0 1 7 6 )
+float MBoard::readSteinhart( const int adc )
+{
+// https://neyasyt.ru/uploads/files/termistor-NTC-10-K-MF52.pdf
+  float steinhart;
+  float tr = 3.30f / readVoltage( adc ) - 1.0f;
+
+  tr = reference_resistance / tr;
+  steinhart = tr / nominal_resistance;                  // (R/Ro)
+  steinhart = log(steinhart);                           // ln(R/Ro)
+  steinhart /= b_value;                                 // 1/B * ln(R/Ro)
+  steinhart += 1.0f / (nominal_temperature + 273.15f);  // + (1/To)
+  steinhart = 1.0f / steinhart;                         // Invert
+  steinhart -= 273.15f;
+  if ( steinhart == -273.15f ) steinhart = 120.0f;
+  return ( steinhart > 120.0f ) ? 120.0f : steinhart;   // В случае обрыва датчика  = 120
+}
