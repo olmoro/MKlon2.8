@@ -1,8 +1,9 @@
 /*
   Файл: dpidfsm.cpp
-  Как это работает.
+  
+    Параметры передаются в команде как положительные  20230301
 
-  Версия от  06.02.2023
+  Версия от  01.03.2023
   */
 
 #include "modes/dpidfsm.h"
@@ -17,7 +18,7 @@ namespace MDPid
     // Переменные, используемые более чем в одном состоянии
   float sp, kp, ki, kd;
   short prof = 1;
-
+  float tmp = 0.0f;     // test
 
   //========== MStart, инициализация ========================================
   MStart::MStart(MTools * Tools) : MState(Tools)
@@ -27,6 +28,9 @@ namespace MDPid
     Display->showHelp((char*)"  C-GO    C*-EXIT  ");    // Подсказка
     Board->ledsOn();                                    // Подтверждение входа белым свечением
     cnt = 7;                                            // Счетчик нажатий для очистки
+
+  Serial.print("ParamMult=0x");   Serial.println(Tools->getParamMult(), HEX);
+
   }
   MState * MStart::fsm()
   {
@@ -35,7 +39,10 @@ namespace MDPid
         // Выход из режима длинным нажатием "C"
       case MKeyboard::C_LONG_CLICK: Board->buzzerOn();  return new MStop(Tools);
         // Начать с выбора и загрузки профиля (kp, KI, KD)
-      case MKeyboard::C_CLICK: Board->buzzerOn();       return new MLoadProf(Tools);
+      case MKeyboard::C_CLICK: Board->buzzerOn();
+        // Обнуляются счетчики времени и отданного заряда
+        Tools->clrTimeCounter();
+        Tools->clrAhCharge();                           return new MLoadProf(Tools);
         // Недокументированная возможность очистки параметров режима (ключей)
       case MKeyboard::B_CLICK: Board->buzzerOn();
         if(--cnt <= 0)                                  return new MClearPidKeys(Tools);
@@ -99,6 +106,10 @@ namespace MDPid
   //========== MLoad, выбор и загрузка профиля ==============================
   MLoadProf::MLoadProf(MTools * Tools) : MState(Tools)
   {
+
+      // Tools->txSetPidParameters(8,10); // убрать, недоделано
+      Tools->txGetPidTreaty(); // 0x47 test 20230201
+
     Display->showHelp((char*)"  +/- PROF   C-GO  ");
     Board->ledsCyan();
   }
@@ -130,6 +141,7 @@ namespace MDPid
         }
         // Команда задать режим по разряду и коэффициенты PID-регулятора
         // и перейти к заданию порога PID-регулятора разряда
+  Serial.print("kp=");  Serial.println(kp);
         Tools->txSetPidCoeffD(kp, ki, kd);              return new MLoadSp(Tools);
 
         // Выбор следующего профиля
@@ -153,7 +165,6 @@ namespace MDPid
   MLoadSp::MLoadSp(MTools * Tools) : MState(Tools)
   {
     sp = Tools->readNvsFloat("pidtest", "spD", MConst::fixedSpD);
- Serial.print("NVSsp=");   Serial.println( sp);
    
       // Индикация при инициализации состояния
     Display->showHelp((char*)"  B-SAVE    C-GO  ");
@@ -175,44 +186,38 @@ namespace MDPid
       case MKeyboard::UP_CLICK: Board->buzzerOn();
         sp = Tools->updnFloat(sp, dn, up, 0.1f);
         Tools->txDischargeGo(sp);
-    //Tools->txSetDiscurrent(0, 0x80);
-          // Команда управления pid-регулятором разряда    // 0x24
-          // Tools->txDischargeGo(float sp) // 0x24
         break;
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
         sp = Tools->updnFloat(sp, dn, up, 1.0f);
         Tools->txDischargeGo(sp);
-    //Tools->txSetDiscurrent(0, 0x100);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
         sp = Tools->updnFloat(sp, dn, up, -0.1f);
         Tools->txDischargeGo(sp);
-    //Tools->txSetDiscurrent(0, 0x200);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
         sp = Tools->updnFloat(sp, dn, up, -1.0f);
         Tools->txDischargeGo(sp);
-    //Tools->txSetDiscurrent(0, 0x300);
         break;
 
         // Включить (0x24)или отключить (0x21) подачу напряжения на клеммы
       case MKeyboard::C_CLICK: Board->buzzerOn();
- Serial.print("statusD=0x");   Serial.println(Tools->getStatusPidDiscurrent(), HEX);
- Serial.print("state=0x");   Serial.println( Tools->getState(), HEX);
- Serial.print("sp=");   Serial.println( sp);
+// Serial.print("statusD=0x");   Serial.println(Tools->getStatusPidDiscurrent(), HEX);
+// Serial.print("state=0x");   Serial.println( Tools->getState(), HEX);
         (Tools->getState() == Tools->getStatusPidDiscurrent()) ? 
           Tools->txPowerStop() : Tools->txDischargeGo(sp); // Напряжение задать любое
         break;
       default:;
     }
       // Индикация, которая могла измениться при исполнении.
-    Display->showMode((char*)"  D-SP = ", sp);
+    //Display->showMode((char*)"  D-SP = ", sp);
+    Display->showMode((char*)"  D-SP = ", -sp);
     (Tools->getState() == Tools->getStatusPidDiscurrent()) ? 
       Board->ledsGreen() : Board->ledsRed();
   //Serial.print("state=0x"); Serial.println(Tools->getState(), HEX);
-    return this;
     Display->showDuration(Tools->getChargeTimeCounter(), MDisplay::SEC);
     Display->showAh(Tools->getAhCharge());
+    return this;
   };
 
 
@@ -225,6 +230,7 @@ namespace MDPid
   }
   MState * MLoadKp::fsm()
   {
+    Tools->chargeCalculations();                        // Подсчет отданных ампер-часов.
     switch (Keyboard->getKey())
     {
       case MKeyboard::C_LONG_CLICK: Board->buzzerOn();  return new MStop(Tools);
@@ -257,11 +263,9 @@ namespace MDPid
         break;
       default:;
     }
-//    Display->showMode((char*)"    KP = ", kp);
     Display->showPidI(kp, 3);
     Display->showAmp(Tools->getRealCurrent(), 3);
     Display->showMode((char*)"        KP         ");
-
     (Tools->getState() == Tools->getStatusPidDiscurrent()) ? 
       Board->ledsGreen() : Board->ledsRed();
     Display->showDuration(Tools->getChargeTimeCounter(), MDisplay::SEC);
@@ -309,14 +313,16 @@ namespace MDPid
       case MKeyboard::C_CLICK: Board->buzzerOn();
         (Tools->getState() == Tools->getStatusPidDiscurrent()) ? 
           Tools->txPowerStop() : Tools->txDischargeGo(sp); // Ток задать любой
+
+
+
+
         break;
       default:;
     }
-    //Display->showMode((char*)"    KI = ", ki);
     Display->showPidI(ki, 3);
     Display->showAmp(Tools->getRealCurrent(), 3);
     Display->showMode((char*)"        KI         ");
-
     (Tools->getState() == Tools->getStatusPidDiscurrent()) ? 
       Board->ledsGreen() : Board->ledsRed();
     Display->showDuration(Tools->getChargeTimeCounter(), MDisplay::SEC);
@@ -367,7 +373,6 @@ namespace MDPid
         break;
       default:;
     }
-    //Display->showMode((char*)"    KD = ", kd);
     Display->showPidI(kd, 3);
     Display->showAmp(Tools->getRealCurrent(), 3);
     Display->showMode((char*)"        KD         ");
@@ -387,6 +392,7 @@ namespace MDPid
   }
   MState * MSaveProf::fsm()
   {
+    Tools->chargeCalculations();                        // Подсчет отданных ампер-часов.
     switch (Keyboard->getKey())
     {
       case MKeyboard::C_LONG_CLICK: Board->buzzerOn();  return new MStop(Tools);
@@ -421,6 +427,8 @@ namespace MDPid
       default:;
     }
     Display->showMode((char*)"  PROF = ", (float)prof);
+    Display->showDuration(Tools->getChargeTimeCounter(), MDisplay::SEC);
+    Display->showAh(Tools->getAhCharge());
     return this;
   };
 

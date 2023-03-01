@@ -10,11 +10,12 @@ namespace MDPid
 
   struct MConst
   {
+    /* Параметры передаются в команде как положительные  20230301*/
     static constexpr float fixedSpD   =  1.0;
     static constexpr short fixedMode  = MODE_D;
       // 
-    static constexpr float fixedKpD =  0.050f;
-    static constexpr float fixedKiD =  0.050f;
+    static constexpr float fixedKpD =  0.100f;
+    static constexpr float fixedKiD =  0.240f;
     static constexpr float fixedKdD =  0.000f;
   };
 
@@ -62,7 +63,7 @@ namespace MDPid
       MState * fsm() override;
     private:
       // min/max для задания тока
-      static constexpr float up = 4.2f;
+      static constexpr float up = 2.0f;
       static constexpr float dn = 0.2f; 
   };
 
@@ -73,8 +74,8 @@ namespace MDPid
       MLoadKp(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up =  0.100f;
-      static constexpr float dn =  0.001f; 
+      static constexpr float up =  0.240f;
+      static constexpr float dn =  0.010f; 
   };
 
   //========== MLoadKi, ввод параметра KI PID-регулятора =================== 
@@ -84,7 +85,7 @@ namespace MDPid
       MLoadKi(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up =  0.100f;
+      static constexpr float up =  0.240f;
       static constexpr float dn =  0.000f; 
   };
 
@@ -95,7 +96,7 @@ namespace MDPid
       MLoadKd(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up =  0.100f;
+      static constexpr float up =  0.240f;
       static constexpr float dn =  0.000f; 
   };
 
