@@ -192,17 +192,26 @@ RGB светодиод, зуммер, клавиатура
 
 Хитрость реализации состоит в том, что не используется функция возведения в степень, пожирающая вычислительный ресурс (конечно, если она используется только здесь).
 
-float MBoard::readVoltage( int adc )
-{
+float MBoard::readVoltage( int adc ) {
+
   // Reference voltage is 3v3 = 4095 in range 0 to 4095
+
   if ( adc < 1 || adc >= 4095 ) return 0;
+
   const float adc2 = adc  * adc;
+
   const float adc3 = adc2 * adc;
+
   return -0.000000000000016f * adc3 * adc
+
         + 0.000000000118171f * adc3
+
         - 0.000000301211691f * adc2
+
         + 0.001109019271794f * adc
+
         + 0.034143524634089f;
+
 }
 
 ***
