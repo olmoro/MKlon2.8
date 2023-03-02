@@ -58,26 +58,18 @@ class MTools
 
     // ========== Управление ПИД-регулятором, частота фиксирована ==========
 
-    //bool setPidCoefficients(float kp, float ki, float kd);
+    // Pid parameters (значения остались от тестирования)
+    uint16_t setpoint       = 0x0800;     // 
+    uint16_t setpointU      = 0x3390;     // 13200
+    uint16_t setpointI      = 0x0BB8;     //  3000
+    uint16_t setpointD      = 0x0258;     //   600
 
-
-      // Pid parameters 
-    uint16_t setpoint   = 0x0800;     // 
-    uint16_t setpointU  = 0x3390;     // 13200
-    uint16_t setpointI  = 0x0BB8;     //  3000
-    uint16_t setpointD  = 0x0258;     //   600
-
-    unsigned short pidMode      = 0x01;       // 1 - начать с регулирования по напряжению
-    unsigned short kp           = 0x0190;
-    unsigned short ki           = 0x00C0;
-    unsigned short kd           = 0x0190;
-    unsigned short minOut       = 0x0220;
-    unsigned short maxOut       = 0x1000;
-
-    //   // Параметры для вычисления множителя при приеме драйвером
-    // unsigned short paramShift   =  8U;
-    // unsigned short pidHz        = 10U;
-
+    unsigned short pidMode  = 0x01;       // 1 - начать с регулирования по напряжению
+    unsigned short kp       = 0x0190;
+    unsigned short ki       = 0x00C0;
+    unsigned short kd       = 0x0190;
+    unsigned short minOut   = 0x0220;
+    unsigned short maxOut   = 0x1000;
 
     // PWM
     uint8_t  pwmInvert = (uint8_t)false;   // Выбор полярности PWM (v55: для отключения при сбросе - 0x00)
@@ -85,15 +77,12 @@ class MTools
 
     uint8_t  swOnOff   = (uint8_t)false;
 
-    //   // Предвычисления коэффициентов
-    // void  setPid( float kp, float ki, float kd );    // KP, KI, KD 
-
     void    setMilliVolt(short val);
     short   getMilliVolt();
     void    setMilliAmper(short val);
     short   getMilliAmper();
 
-      // Текущие целочисленные в мВ и мА напряжение и ток преобразуются в вольты и амперы 
+    // Текущие целочисленные в мВ и мА напряжение и ток преобразуются в вольты и амперы 
     void    setVoltageVolt(short);
     float   getVoltageVolt();
     void    setCurrentAmper(short);
@@ -117,7 +106,7 @@ class MTools
 
     bool getAP();
 
-      // Чтение и запись NVS
+    // Чтение и запись NVS
     bool  readNvsBool  (const char * name, const char * key, const bool  defaultValue );
     short readNvsShort (const char * name, const char * key, const short defaultValue );
     int   readNvsInt   (const char * name, const char * key, const int   defaultValue );
@@ -150,7 +139,7 @@ class MTools
     short getCooler();
     void  setCooler(short val);
 
-      // АЦП - настройки
+    // АЦП - настройки
     void  setAdcV(short val);
     void  setAdcI(short val);
     short getAdcOffset();
@@ -169,10 +158,9 @@ class MTools
     void txGetI();                                          // 0x12 Чтение тока (мА)
     void txGetUI();                                         // 0x13 Чтение напряжения (мВ) и тока (мА)
     void txGetState();                                      // 0x14 Чтение состояния
-    //void txCelsius();                                       // 0x15 Чтение температуры радиатора
-    void txReady();                                       // 0x15 Параметры согласованы
+    void txReady();                                         // 0x15 Параметры согласованы
       
-      // 
+      // Команды stop/go
     void txPowerAuto(float spV, float spI);                 // 0x20
     void txPowerStop();                                     // 0x21
     void txPowerMode(float spV, float spI, uint8_t mode);   // 0x22
@@ -218,8 +206,6 @@ class MTools
     void txGetPidConfig();                                  // 0x48 get mode, kP, kI, kD, min, max - возвращает параметры текущего режима регулирования
     void txSetPidTreaty(unsigned short shift, unsigned short bits, unsigned short hz);  // 0x4A Запись
     
-    //void txSetCooler(short val);                            // 0x4F Задать скорость вентилятора
-
     void txGetProbes();                                     // 0x50
     void txGetAdcOffset();                                  // 0x51
     void txSetAdcOffset(short val);                         // 0x52
@@ -294,32 +280,6 @@ class MTools
         Интегральный член kp должен быть ненулевым.
       */ 
 
-        // static constexpr uint8_t  param_shift = 8U;
-        // static constexpr uint8_t  param_bits  = 16U;
-        // static constexpr uint16_t param_max   = (((0x1ULL << param_bits)-1) >> param_shift);
-        // static constexpr uint16_t param_mult  = (((0x1ULL << param_bits)) >> (param_bits - param_shift));
-        // static constexpr uint16_t param_hz    = 10U;
-
-    // unsigned short paramMult = 0x0040;   // Полученный от драйвера
-    // unsigned short paramMult = 0x0080;   // Полученный от драйвера
-//    unsigned short paramMult = 0x0100;   // Полученный от драйвера
-    // unsigned short paramMult = 0x0200;   // Полученный от драйвера
-    //unsigned short paramMult = 0x0400;   // Полученный от драйвера
-
-    // unsigned short paramMax  = 0x00FF;   // Полученный от драйвера
-    // unsigned short pidHz     = 10;       // Полученный от драйвера
-    // // Планируется заменить на 
-    // unsigned short paramShift =  8U;
-    // unsigned short paramBits  = 16U;
-    // unsigned short paramHz    = 10U;
-
-    // // ============= Согласованные параметры обмена 20230201 =============
-    //   // По умолчанию
-    // static constexpr unsigned short param_shift = 8U;
-    // static constexpr unsigned short param_bits  = 16U;
-    // static constexpr unsigned short param_max   = (((0x1ULL << param_bits)-1) >> param_shift);
-    // static constexpr unsigned short param_mult  = (((0x1ULL << param_bits)) >> (param_bits - param_shift));
-    // static constexpr unsigned short param_hz    = 10U;
     // ============= Согласованные параметры обмена 20230217 =============
       // По умолчанию
     static constexpr unsigned short param_shift = 9U;
@@ -386,9 +346,10 @@ class MTools
     //==== PRIVATE ==== PRIVATE ==== PRIVATE ==== PRIVATE ==== PRIVATE ==== PRIVATE ==== PRIVATE ====
 
     // Пороги отключения по умолчанию: мВ, мА  (имитация аппаратной поддержки)
-    static constexpr short lt_default_v  =  -200;   // при переплюсовке
+    // Согласовать с драйвером
+    static constexpr short lt_default_v  =  -200;   // при переполюсовке
     static constexpr short up_default_v  = 19500;   // исполняется конструктивно
-    static constexpr short lt_default_i  = -1500;   // максимальный ток разряда
+    static constexpr short lt_default_i  = -2000;   // максимальный ток разряда
     static constexpr short up_default_i  =  6000;   // максимальный ток заряда
       // Пороги отключения: мВ, мА  (имитация аппаратной поддержки)
     short ltV = lt_default_v;
@@ -410,16 +371,13 @@ class MTools
     int   timeCounter       = 0;
     int   chargeTimeCounter = 0;
 
-    //    void printAll( const char * s );
-
     //================= Measures =====================
-        int   keyCode = 0;    
+    int   keyCode = 0;    
 
+    short cool = 0;           // Скорость вентилятора - уточнить
 
-      short cool = 0;           // Скорость вентилятора - уточнить
-
-      bool blocking;    // 
-      bool tuningAdc  = false;  // Флаг подстройки смещения АЦП
+    bool blocking;            // 
+    bool tuningAdc  = false;  // Флаг подстройки смещения АЦП
 };
 
 #endif //_MTOOLS_H_

@@ -36,7 +36,6 @@ MTools::~MTools()
   //      Keyboard = keyboard;
   //}
 
-
     // Флаг блокировки обмена с драйвером на время его рестарта
 bool MTools::getBlocking()                      {return blocking;}
 void MTools::setBlocking(bool bl)               {blocking = bl;}
@@ -82,8 +81,7 @@ void  MTools::chargeCalculations()
 {
   timeCounter++;
   chargeTimeCounter = ((int)timeCounter / 10);
-    //ahCharge += Tools->getRealCurrent() / 36000.0;     //    ((float)( 1000 / simpleChargerPeriod ) * 3600.0);
-  ahCharge += current / 36000.0;     //    ((float)( 1000 / simpleChargerPeriod ) * 3600.0);
+  ahCharge += current / 36000.0;
 }
 
 // ==================================== Nvs read ====================================
@@ -229,7 +227,6 @@ void MTools::txGetU()               {buffCmd = MCmd::cmd_get_u;}        // 0x11 
 void MTools::txGetI()               {buffCmd = MCmd::cmd_get_i;}        // 0x12 Чтение тока (мА)
 void MTools::txGetUI()              {buffCmd = MCmd::cmd_get_ui;}       // 0x13 Чтение напряжения (мВ) и тока (мА)
 void MTools::txGetState()           {buffCmd = MCmd::cmd_get_state;}    // 0x14 Чтение состояния
-//void MTools::txCelsius()            {buffCmd = MCmd::cmd_get_celsius;}  // 0x15 Чтение температуры радиатора
 void MTools::txReady()              {buffCmd = MCmd::cmd_ready;}  // 0x15 Параметры согласованы
 
   // Команда управления PID-регулятором заряда    0x20
@@ -240,10 +237,10 @@ void MTools::txPowerAuto(float spV, float spI)
   buffCmd   = MCmd::cmd_power_auto;
 } 
 
-void MTools::txPowerStop()                            {buffCmd = MCmd::cmd_power_stop;}         // 0x21
+  // Команда перевода в безопасный режим (выключение 
+void MTools::txPowerStop()                            {buffCmd = MCmd::cmd_power_stop;}               // 0x21
 
-
-  // Команда управления PID-регулятором с выбором режима                                                // 0x22
+  // Команда управления PID-регулятором с выбором режима                                              // 0x22
 void MTools::txPowerMode(float spV, float spI, uint8_t mode)
 {
   setpointU = (short)(spV * 1000);
@@ -252,7 +249,7 @@ void MTools::txPowerMode(float spV, float spI, uint8_t mode)
   buffCmd   = MCmd::cmd_power_mode;
 }
 
-  // Команда управления pid-регулятором разряда                                                         // 0x24
+  // Команда управления pid-регулятором разряда                                                        // 0x24
 void MTools::txDischargeGo(float spI)
 {
   setpointI = (short)(spI * 1000);
@@ -306,8 +303,8 @@ void MTools::txSetPidCoeffV(float _kp, float _ki, float _kd)
 {
     pidMode = 1;
     kp      = (unsigned short) (_kp * pMult);
-    ki      = (unsigned short) (_ki * pMult);  //   / pHz);
-    kd      = (unsigned short) (_kd * pMult);  //   * pHz);
+    ki      = (unsigned short) (_ki * pMult);
+    kd      = (unsigned short) (_kd * pMult);
     buffCmd = MCmd::cmd_pid_write_coefficients;                                                      // 0x41 Запись
 }
 
@@ -315,8 +312,8 @@ void MTools::txSetPidCoeffI(float _kp, float _ki, float _kd)
 {
     pidMode = 2;
     kp      = (unsigned short) (_kp * pMult);
-    ki      = (unsigned short) (_ki * pMult);   // / pHz);
-    kd      = (unsigned short) (_kd * pMult);   // * pHz);
+    ki      = (unsigned short) (_ki * pMult);
+    kd      = (unsigned short) (_kd * pMult);
     buffCmd = MCmd::cmd_pid_write_coefficients;                                                    // 0x41 Запись
 }
 
@@ -324,9 +321,9 @@ void MTools::txSetPidCoeffD(float _kp, float _ki, float _kd)
 {
     pidMode = 3;
     kp      = (unsigned short) (_kp * pMult);
-    ki      = (unsigned short) (_ki * pMult);  //  / pHz);
-    kd      = (unsigned short) (_kd * pMult);  //  * pHz);
-    buffCmd = MCmd::cmd_pid_write_coefficients;                                     // 0x41 Запись
+    ki      = (unsigned short) (_ki * pMult);
+    kd      = (unsigned short) (_kd * pMult);
+    buffCmd = MCmd::cmd_pid_write_coefficients;                                                       // 0x41 Запись
 
   Serial.print("pMult=0x"); Serial.println(pMult, HEX);
   Serial.print("kp=0x");    Serial.println(kp, HEX);
@@ -340,7 +337,7 @@ void MTools::txSetPidOutputRange(uint8_t _m, uint16_t _minOut, uint16_t _maxOut)
     pidMode = _m;
     minOut  = _minOut;
     maxOut  = _maxOut;
-    buffCmd = MCmd::cmd_pid_output_range;                                                          // 0x42 Запись
+    buffCmd = MCmd::cmd_pid_output_range;                                                             // 0x42 Запись
 }
 
 void MTools::txSetPidReconfig(uint8_t _m, float _kp, float _ki, float _kd, uint16_t _minOut, uint16_t _maxOut)
@@ -351,14 +348,14 @@ void MTools::txSetPidReconfig(uint8_t _m, float _kp, float _ki, float _kd, uint1
     kd      = (unsigned short)((_kd * pMult) * pHz);
     minOut  = _minOut;
     maxOut  = _maxOut;
-    buffCmd = MCmd::cmd_pid_reconfigure;                                                           // 0x43 Запись
+    buffCmd = MCmd::cmd_pid_reconfigure;                                                              // 0x43 Запись
 }
 
-void MTools::txPidClear()                             {buffCmd = MCmd::cmd_pid_clear;}             // 0x44
+void MTools::txPidClear()                             {buffCmd = MCmd::cmd_pid_clear;}                // 0x44
 
-void MTools::txGetPidTreaty()                         {buffCmd = MCmd::cmd_pid_read_treaty;}       // 0x47 Get shift, bits, hz
+void MTools::txGetPidTreaty()                         {buffCmd = MCmd::cmd_pid_read_treaty;}          // 0x47 Get shift, bits, hz
 
-void MTools::txGetPidConfig()                         {buffCmd = MCmd::cmd_pid_read_configure;}    // 0x48 get mode, kP, kI, kD, min, max - возвращает параметры текущего режима регулирования
+void MTools::txGetPidConfig()                         {buffCmd = MCmd::cmd_pid_read_configure;}       // 0x48 get mode, kP, kI, kD, min, max - возвращает параметры текущего режима регулирования
 
 // Ввод параметров PID-регулятора для синхронизации            0x4A (резерв)
 void MTools::txSetPidTreaty(unsigned short shift, unsigned short bits, unsigned short hz)
@@ -366,7 +363,7 @@ void MTools::txSetPidTreaty(unsigned short shift, unsigned short bits, unsigned 
     // paramShift = shift;
     // paramBits  = bits;
     // pidHz      = hz;
-    buffCmd = MCmd::cmd_pid_write_treaty;                                                               // 0x4A Запись
+    buffCmd = MCmd::cmd_pid_write_treaty;                                                             // 0x4A Запись
 }
 
   // 0x5A тестовая проверки регулятора разряда 20230210
@@ -379,34 +376,34 @@ void MTools::txSetDiscurrent(uint8_t m, unsigned short val)
 
 
   // Команды работы с АЦП
-void MTools::txGetProbes()                              {buffCmd = MCmd::cmd_adc_read_probes;}          // 0x50
-void MTools::txGetAdcOffset()                           {buffCmd = MCmd::cmd_adc_read_offset;}          // 0x51  
-void MTools::txSetAdcOffset(short val) {offsetAdc = val; buffCmd = MCmd::cmd_adc_write_offset;}         // 0x52
-void MTools::txAdcAutoOffset()                          {buffCmd = MCmd::cmd_adc_auto_offset;}          // 0x53 nu 
+void MTools::txGetProbes()                              {buffCmd = MCmd::cmd_adc_read_probes;}        // 0x50
+void MTools::txGetAdcOffset()                           {buffCmd = MCmd::cmd_adc_read_offset;}        // 0x51  
+void MTools::txSetAdcOffset(short val) {offsetAdc = val; buffCmd = MCmd::cmd_adc_write_offset;}       // 0x52
+void MTools::txAdcAutoOffset()                          {buffCmd = MCmd::cmd_adc_auto_offset;}        // 0x53 nu 
 
   // Команды управления тестовые
 
   // Команды задания порогов отключения
-void MTools::txGetLtV()                            {buffCmd = MCmd::cmd_get_lt_v;}                      // 0x60
-void MTools::txSetLtV(short val)        {ltV = val; buffCmd = MCmd::cmd_set_lt_v;}                      // 0x61
-void MTools::txSetLtDefaultV(short val) {ltV = val; buffCmd = MCmd::cmd_set_lt_default_v;}              // 0x62
-void MTools::txGetUpV()                            {buffCmd = MCmd::cmd_get_up_v;}                      // 0x63
-void MTools::txSetUpV(short val)        {upV = val; buffCmd = MCmd::cmd_set_up_v;}                      // 0x64
-void MTools::txSetUpDefaultV(short val) {upV = val; buffCmd = MCmd::cmd_set_up_default_v;}              // 0x65
+void MTools::txGetLtV()                            {buffCmd = MCmd::cmd_get_lt_v;}                    // 0x60
+void MTools::txSetLtV(short val)        {ltV = val; buffCmd = MCmd::cmd_set_lt_v;}                    // 0x61
+void MTools::txSetLtDefaultV(short val) {ltV = val; buffCmd = MCmd::cmd_set_lt_default_v;}            // 0x62
+void MTools::txGetUpV()                            {buffCmd = MCmd::cmd_get_up_v;}                    // 0x63
+void MTools::txSetUpV(short val)        {upV = val; buffCmd = MCmd::cmd_set_up_v;}                    // 0x64
+void MTools::txSetUpDefaultV(short val) {upV = val; buffCmd = MCmd::cmd_set_up_default_v;}            // 0x65
 
-void MTools::txGetLtI()                            {buffCmd = MCmd::cmd_get_lt_i;}                      // 0x68
-void MTools::txSetLtI(short val)        {ltI = val; buffCmd = MCmd::cmd_set_lt_i;}                      // 0x69
-void MTools::txSetLtDefaultI(short val) {ltI = val; buffCmd = MCmd::cmd_set_lt_default_i;}              // 0x6A
-void MTools::txGetUpI()                            {buffCmd = MCmd::cmd_get_up_i;}                      // 0x6B
-void MTools::txSetUpI(short val)        {upI = val; buffCmd = MCmd::cmd_set_up_i;}                      // 0x6C
-void MTools::txSetUpDefaultI(short val) {upI = val; buffCmd = MCmd::cmd_set_up_default_i;}              // 0x6D
+void MTools::txGetLtI()                            {buffCmd = MCmd::cmd_get_lt_i;}                    // 0x68
+void MTools::txSetLtI(short val)        {ltI = val; buffCmd = MCmd::cmd_set_lt_i;}                    // 0x69
+void MTools::txSetLtDefaultI(short val) {ltI = val; buffCmd = MCmd::cmd_set_lt_default_i;}            // 0x6A
+void MTools::txGetUpI()                            {buffCmd = MCmd::cmd_get_up_i;}                    // 0x6B
+void MTools::txSetUpI(short val)        {upI = val; buffCmd = MCmd::cmd_set_up_i;}                    // 0x6C
+void MTools::txSetUpDefaultI(short val) {upI = val; buffCmd = MCmd::cmd_set_up_default_i;}            // 0x6D
 
 
   // Подсчет задержки пуска
 bool MTools::postponeCalculation()
 {
     timeCounter--;
-    chargeTimeCounter = timeCounter / 10;   //2;
+    chargeTimeCounter = timeCounter / 10;
     if( chargeTimeCounter == 0 ) return true;
     return false;
 }

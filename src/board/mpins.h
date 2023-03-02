@@ -1,9 +1,9 @@
 /*
   Файл    mpins.h
-  Проект  MKlon2.5a
+  Проект  MKlon2.7a
   Порты   ESP32
-  pcb:    Mklon2v5a, Mklon2v7a
-  06.01.2023
+  pcb:    Mklon2v7a
+  02.03.2023
 */
 
 #ifndef _MPINS_H_
@@ -47,15 +47,15 @@ namespace MPins
     // * - справочно, настройки интерфейса дисплея задавать в mklon27_setup.h
   #endif
 
-  #ifdef MKLON2V5A
-    // Порты дисплея (справочно). Порт IO19 не занимать, зарезервирован для MISO 
-    constexpr char vspi_scl_pin   = 18;   //          VSPI_SCL*    Порт тактовый
-    constexpr char vspi_sda_pin   = 23;   //          VSPI_SDA*    Порт данных
-    constexpr char lcd_res_pin    = -1;   //          LCD_RES*     Порт рестарта (в v5 ОШИБКА переподключить к EN)
-    constexpr char lcd_dc_pin     = 05;   //          LCD_DC*      Порт выбора
-    constexpr char lcd_cs_pin     = -1;   //          Grounded*
-    // * - справочно, настройки интерфейса дисплея задавать в mklon25_setup.h
-  #endif
+  // #ifdef MKLON2V5A
+  //   // Порты дисплея (справочно). Порт IO19 не занимать, зарезервирован для MISO 
+  //   constexpr char vspi_scl_pin   = 18;   //          VSPI_SCL*    Порт тактовый
+  //   constexpr char vspi_sda_pin   = 23;   //          VSPI_SDA*    Порт данных
+  //   constexpr char lcd_res_pin    = -1;   //          LCD_RES*     Порт рестарта (в v5 ОШИБКА переподключить к EN)
+  //   constexpr char lcd_dc_pin     = 05;   //          LCD_DC*      Порт выбора
+  //   constexpr char lcd_cs_pin     = -1;   //          Grounded*
+  //   // * - справочно, настройки интерфейса дисплея задавать в mklon25_setup.h
+  // #endif
 
   // UART
   constexpr char u2rxd_pin        = 16;   // in       U2RXD       Порт приемника
@@ -65,7 +65,7 @@ namespace MPins
   constexpr char i2c2_sda_pin     = 21;   // io       SDA         Порт данных
   constexpr char i2c2_scl_pin     = 22;   // out      SCL         Порт тактовый
 
-  #ifdef MKLON2V7a
+  #ifdef MKLON2V7A
     constexpr char rtc_sqw_pin    = 32;    // in     SQW
     constexpr char io36_pin       = 36;    // in     IO36 (VP)    Резерв 
     constexpr char io12_pin       = 12;    // io     IO12         Резерв 
