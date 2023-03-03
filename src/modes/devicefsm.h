@@ -99,7 +99,7 @@ namespace MDevice
       MState * fsm() override;
     private:
       short smooth;
-      static constexpr short fixed = 2;
+      static constexpr short fixed = 4;
       static constexpr short above = 8;
       static constexpr short below = 0; 
   };

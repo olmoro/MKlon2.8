@@ -90,7 +90,7 @@ namespace MBoot
       MTxSmoothI(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr unsigned short fixed = 0x0002;
+      static constexpr unsigned short fixed = 4;    //0x0002;
   };
   
   class MTxShiftI : public MState
