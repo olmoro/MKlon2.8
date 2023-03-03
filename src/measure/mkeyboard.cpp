@@ -90,19 +90,19 @@ void MButton::check(uint8_t & keyBuff)
     case SB_CLICK:
         keyBuff = Click;
 			  #ifdef PRINT_KEY
-      	  Serial.println("Press " + DebugName);
+      	        Serial.println("Press " + DebugName);
 			  #endif
         break;
     case SB_LONG_CLICK:
         keyBuff = LongClick;
 			  #ifdef PRINT_KEY
-      	  Serial.println("Long press " + DebugName);
+      	        Serial.println("Long press " + DebugName);
 			  #endif
         break;
     case SB_AUTO_CLICK:
         keyBuff = AutoClick;
 			  #ifdef PRINT_KEY
-      	  Serial.println("Auto press " + DebugName);
+      	        Serial.println("Auto press " + DebugName);
 			  #endif
         break;
     default:

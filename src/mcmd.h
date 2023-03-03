@@ -15,7 +15,7 @@ namespace MCmd
   constexpr uint8_t cmd_get_i                     = 0x12; // Чтение тока (мА)
   constexpr uint8_t cmd_get_ui                    = 0x13; // Чтение напряжения (мВ) и тока (мА)
   constexpr uint8_t cmd_get_state                 = 0x14; // Чтение состояния
-      constexpr uint8_t cmd_ready                 = 0x15; // Параметры согласованы
+  constexpr uint8_t cmd_ready                     = 0x15; // Параметры согласованы
 
     // Команды управления
   constexpr uint8_t cmd_power_auto                = 0x20; // старт преобразователя с автоматическим выбором регулятора U и I

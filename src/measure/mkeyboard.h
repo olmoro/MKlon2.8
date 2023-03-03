@@ -55,11 +55,11 @@ class MButton
         void check(uint8_t & keyBuff);
 
     private:
-        SButton *            Button = nullptr;
+        SButton * Button = nullptr;
         MKeyboard::KEY_PRESS Click;
         MKeyboard::KEY_PRESS LongClick;
         MKeyboard::KEY_PRESS AutoClick;
-        String               DebugName;
+        String DebugName;
 };
 
 #endif //_MKEYBOARD_H_

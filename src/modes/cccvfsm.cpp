@@ -470,7 +470,7 @@ namespace MCccv
   // Состояние: "Подъем и удержание максимального тока"
   MUpCurrent::MUpCurrent(MTools * Tools) : MState(Tools)
   {   
-      // Индикация входа в режим ConstCurrent
+      // Индикация входа в состояние ConstCurrent
     Display->showMode((char*)"  CONST CURRENT   ");
     Display->showHelp((char*)"      C-STOP      ");
     Board->ledsGreen();

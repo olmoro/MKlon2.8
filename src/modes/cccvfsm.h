@@ -7,11 +7,11 @@ namespace MCccv
 {
   struct MConst
   {                               // 20230204
-    static constexpr float fixedKpV = 0.050f;     //0.06f;    //  15
-    static constexpr float fixedKiV = 0.050f;     //0.40f;    // 
+    static constexpr float fixedKpV = 0.100f;     //0.06f;    //  15
+    static constexpr float fixedKiV = 0.240f;     //0.40f;    // 
     static constexpr float fixedKdV = 0.000f;     //0.00f;    //   0 0x0000
-    static constexpr float fixedKpI = 0.050f;     //0.08f;    //  20
-    static constexpr float fixedKiI = 0.050f;     //0.40f;    //  
+    static constexpr float fixedKpI = 0.100f;     //0.08f;    //  20
+    static constexpr float fixedKiI = 0.240f;     //0.40f;    //  
     static constexpr float fixedKdI = 0.000f;     //0.00f;    //   0 0x0000  
   };
 
@@ -63,7 +63,7 @@ namespace MCccv
       MState * fsm() override;
     private:
         // Пределы регулирования max напряжения
-      static constexpr float above = 16.2f;
+      static constexpr float above = 14.4f;
       static constexpr float below = 10.0f;
   };
 
@@ -74,7 +74,7 @@ namespace MCccv
       MState * fsm() override;
     private:
         // Пределы регулирования min тока
-      static constexpr float above = 6.0f;
+      static constexpr float above = 2.0f;
       static constexpr float below = 0.2f;
   };
 
@@ -85,7 +85,7 @@ namespace MCccv
       MState * fsm() override;
     private:
         // Пределы регулирования min напряжения
-      static constexpr float above = 16.2f;
+      static constexpr float above = 13.2f;
       static constexpr float below = 10.0f;
   };
 
