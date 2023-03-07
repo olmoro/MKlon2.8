@@ -49,9 +49,31 @@ unsigned short MTools::getPostpone()            {return postpone;}
 
 
   // Напряжение и ток без преобразования
-void    MTools::setMilliVolt(short val)         {milliVolt = val; voltage = (float)val / 1000;}
-short   MTools::getMilliVolt()                  {return milliVolt;}
-void    MTools::setMilliAmper(short val)        {milliAmper = val; current = (float)val / 1000;}
+void MTools::setMilliVolt(short val)
+{
+  // (sum += val - (sum >> beauty)) >> beauty
+  static int32_t sum = 0;
+  short beauty = 2;
+  val = (sum += val - (sum >> beauty)) >> beauty;
+
+  milliVolt = val;
+  voltage = (float)val / 1000;
+}
+
+short MTools::getMilliVolt()                  {return milliVolt;}
+
+void MTools::setMilliAmper(short val)
+{
+  // (sum += val - (sum >> beauty)) >> beauty
+  static int32_t sum = 0;
+  short beauty = 2;
+  val = (sum += val - (sum >> beauty)) >> beauty;
+ 
+  milliAmper = val;
+  current = (float)val / 1000;
+}
+
+
 short   MTools::getMilliAmper()                 {return milliAmper;}
 
   // Текущие целочисленные в мВ и мА напряжение и ток преобразуются в вольты и амперы 

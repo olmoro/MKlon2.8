@@ -3,7 +3,7 @@
   
     Параметры передаются в команде как положительные  20230301
 
-  Версия от  01.03.2023
+  Версия от  07.03.2023
   */
 
 #include "modes/dpidfsm.h"
@@ -241,19 +241,19 @@ namespace MDPid
         Tools->writeNvsFloat("pidtest", "kpD", kp);     return new MLoadKi(Tools);
       case MKeyboard::B_LONG_CLICK: Board->buzzerOn();  return new MSaveProf(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, 0.001f);
+        kp = Tools->updnFloat(kp, dn, up, 0.01f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;     
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, 0.010f);
+        kp = Tools->updnFloat(kp, dn, up, 0.10f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, -0.001f);
+        kp = Tools->updnFloat(kp, dn, up, -0.01f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, -0.010f);
+        kp = Tools->updnFloat(kp, dn, up, -0.10f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
         // Включить (0x24)или отключить (0x21) разряд
@@ -263,7 +263,7 @@ namespace MDPid
         break;
       default:;
     }
-    Display->showPidI(kp, 3);
+    Display->showPidI(kp, 2);
     Display->showAmp(Tools->getRealCurrent(), 3);
     Display->showMode((char*)"        KP         ");
     (Tools->getState() == Tools->getStatusPidDiscurrent()) ? 
@@ -294,19 +294,19 @@ namespace MDPid
         Tools->writeNvsFloat("pidtest", "kiD", ki);     return new MLoadKd(Tools);
       case MKeyboard::B_LONG_CLICK: Board->buzzerOn();  return new MSaveProf(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, 0.001f);
+        ki = Tools->updnFloat(ki, dn, up, 0.01f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;     
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, 0.010f);
+        ki = Tools->updnFloat(ki, dn, up, 0.10f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, -0.001f);
+        ki = Tools->updnFloat(ki, dn, up, -0.01f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, -0.010f);
+        ki = Tools->updnFloat(ki, dn, up, -0.10f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
         // Включить (0x24)или отключить (0x21) подачу напряжения на клеммы
@@ -320,7 +320,7 @@ namespace MDPid
         break;
       default:;
     }
-    Display->showPidI(ki, 3);
+    Display->showPidI(ki, 2);
     Display->showAmp(Tools->getRealCurrent(), 3);
     Display->showMode((char*)"        KI         ");
     (Tools->getState() == Tools->getStatusPidDiscurrent()) ? 
@@ -351,19 +351,19 @@ namespace MDPid
         Tools->writeNvsFloat("pidtest", "kdD", kd);     return new MLoadSp(Tools);
       case MKeyboard::B_LONG_CLICK: Board->buzzerOn();  return new MSaveProf(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, 0.001f);
+        kd = Tools->updnFloat(kd, dn, up, 0.01f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;     
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, 0.010f);
+        kd = Tools->updnFloat(kd, dn, up, 0.10f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, -0.001f);
+        kd = Tools->updnFloat(kd, dn, up, -0.01f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, -0.010f);
+        kd = Tools->updnFloat(kd, dn, up, -0.10f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
         // Включить (0x24)или отключить (0x21) подачу напряжения на клеммы
@@ -373,7 +373,7 @@ namespace MDPid
         break;
       default:;
     }
-    Display->showPidI(kd, 3);
+    Display->showPidI(kd, 2);
     Display->showAmp(Tools->getRealCurrent(), 3);
     Display->showMode((char*)"        KD         ");
     (Tools->getState() == Tools->getStatusPidDiscurrent()) ? 

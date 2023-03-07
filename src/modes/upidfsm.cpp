@@ -292,19 +292,19 @@ Serial.print("ParamMult=0x");   Serial.println(Tools->getParamMult(), HEX);
         Tools->writeNvsFloat("pidtest", "kpV", kp);     return new MLoadKi(Tools);
       case MKeyboard::B_LONG_CLICK: Board->buzzerOn();  return new MSaveProf(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, 0.001f);
+        kp = Tools->updnFloat(kp, dn, up, 0.01f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;     
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, 0.010f);
+        kp = Tools->updnFloat(kp, dn, up, 0.10f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, -0.001f);
+        kp = Tools->updnFloat(kp, dn, up, -0.01f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, -0.010f);
+        kp = Tools->updnFloat(kp, dn, up, -0.10f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
         // Включить (0x22 )или отключить (0x21) подачу напряжения на клеммы
@@ -315,7 +315,7 @@ Serial.print("ParamMult=0x");   Serial.println(Tools->getParamMult(), HEX);
       default:;
     }
     Display->showVolt(Tools->getRealVoltage(), 3);
-    Display->showPidV(kp, 3);
+    Display->showPidV(kp, 2);
     Display->showMode((char*)"        KP         ");
     (Tools->getState() == Tools->getStatusPidVoltage()) ? 
       Board->ledsGreen() : Board->ledsRed();
@@ -345,19 +345,19 @@ Serial.print("ParamMult=0x");   Serial.println(Tools->getParamMult(), HEX);
         Tools->writeNvsFloat("pidtest", "kiV", ki);     return new MLoadKd(Tools);
       case MKeyboard::B_LONG_CLICK: Board->buzzerOn();  return new MSaveProf(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, 0.001f);
+        ki = Tools->updnFloat(ki, dn, up, 0.01f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;     
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, 0.010f);
+        ki = Tools->updnFloat(ki, dn, up, 0.10f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, -0.001f);
+        ki = Tools->updnFloat(ki, dn, up, -0.01f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, -0.010f);
+        ki = Tools->updnFloat(ki, dn, up, -0.10f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
         // Включить (0x22 )или отключить (0x21) подачу напряжения на клеммы
@@ -372,7 +372,7 @@ Serial.print("ParamMult=0x");   Serial.println(Tools->getParamMult(), HEX);
       default:;
     }
     Display->showVolt(Tools->getRealVoltage(), 3);
-    Display->showPidV(ki, 3);
+    Display->showPidV(ki, 2);
     Display->showMode((char*)"        KI         ");
     (Tools->getState() == Tools->getStatusPidVoltage()) ? 
       Board->ledsGreen() : Board->ledsRed();
@@ -402,19 +402,19 @@ Serial.print("ParamMult=0x");   Serial.println(Tools->getParamMult(), HEX);
         Tools->writeNvsFloat("pidtest", "kdV", kd);     return new MLoadSp(Tools);
       case MKeyboard::B_LONG_CLICK: Board->buzzerOn();  return new MSaveProf(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, 0.001f);
+        kd = Tools->updnFloat(kd, dn, up, 0.01f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;     
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, 0.010f);
+        kd = Tools->updnFloat(kd, dn, up, 0.10f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, -0.001f);
+        kd = Tools->updnFloat(kd, dn, up, -0.01f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, -0.010f);
+        kd = Tools->updnFloat(kd, dn, up, -0.10f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
         // Включить (0x22 )или отключить (0x21) подачу напряжения на клеммы
@@ -425,7 +425,7 @@ Serial.print("ParamMult=0x");   Serial.println(Tools->getParamMult(), HEX);
       default:;
     }
     Display->showVolt(Tools->getRealVoltage(), 3);
-    Display->showPidV(kd, 3);
+    Display->showPidV(kd, 2);
     Display->showMode((char*)"        KD         ");
     (Tools->getState() == Tools->getStatusPidVoltage()) ? 
       Board->ledsGreen() : Board->ledsRed();

@@ -14,9 +14,9 @@ namespace MDPid
     static constexpr float fixedSpD   =  1.0;
     static constexpr short fixedMode  = MODE_D;
       // 
-    static constexpr float fixedKpD =  0.100f;
-    static constexpr float fixedKiD =  0.240f;
-    static constexpr float fixedKdD =  0.000f;
+    static constexpr float fixedKpD =  0.070f;
+    static constexpr float fixedKiD =  0.020f;
+    static constexpr float fixedKdD =  0.002f;
   };
 
   //========== MStart, инициализация ========================================
@@ -74,8 +74,8 @@ namespace MDPid
       MLoadKp(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up =  0.240f;
-      static constexpr float dn =  0.010f; 
+      static constexpr float up =  2.00f;
+      static constexpr float dn =  0.01f; 
   };
 
   //========== MLoadKi, ввод параметра KI PID-регулятора =================== 
@@ -85,8 +85,8 @@ namespace MDPid
       MLoadKi(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up =  0.240f;
-      static constexpr float dn =  0.000f; 
+      static constexpr float up =  2.00f;
+      static constexpr float dn =  0.00f; 
   };
 
   //========== MLoadKd, ввод параметра KD PID-регулятора =================== 
@@ -96,8 +96,8 @@ namespace MDPid
       MLoadKd(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up =  0.240f;
-      static constexpr float dn =  0.000f; 
+      static constexpr float up =  2.00f;
+      static constexpr float dn =  0.00f; 
   };
 
   //========== MSaveProf, сохранение профиля под выбранным номером ========== 

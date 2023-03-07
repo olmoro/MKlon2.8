@@ -14,9 +14,9 @@ namespace MUPid
     static constexpr float fixedSpI   =  2.0;
     static constexpr short fixedMode  = MODE_V;
       //
-    static constexpr float fixedKpV =  0.100f;
-    static constexpr float fixedKiV =  0.240f;
-    static constexpr float fixedKdV =  0.000f;
+    static constexpr float fixedKpV =  0.56f;
+    static constexpr float fixedKiV =  1.79f;
+    static constexpr float fixedKdV =  0.08f;
   };
 
   //========== MStart, инициализация ========================================
@@ -74,8 +74,8 @@ namespace MUPid
       MLoadKp(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up =  0.240f;
-      static constexpr float dn =  0.010f; 
+      static constexpr float up =  2.00f;
+      static constexpr float dn =  0.10f; 
   };
 
   //========== MLoadKi, ввод параметра KI PID-регулятора напряжения ========= 
@@ -85,8 +85,8 @@ namespace MUPid
       MLoadKi(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up =  0.240f;
-      static constexpr float dn =  0.000f;
+      static constexpr float up =  2.00f;
+      static constexpr float dn =  0.00f;
   };
 
   //========== MLoadKd, ввод параметра KD PID-регулятора напряжения ========= 
@@ -96,8 +96,8 @@ namespace MUPid
       MLoadKd(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up =  0.240f;
-      static constexpr float dn =  0.000f;
+      static constexpr float up =  2.00f;
+      static constexpr float dn =  0.00f;
   };
 
   //========== MSaveProf, сохранение профиля под выбранным номером ========== 
