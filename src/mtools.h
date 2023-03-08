@@ -204,7 +204,8 @@ class MTools
 
     void txGetPidTreaty();                                  // 0x47 Get shift, bits, hz
     void txGetPidConfig();                                  // 0x48 get mode, kP, kI, kD, min, max - возвращает параметры текущего режима регулирования
-    void txSetPidTreaty(unsigned short shift, unsigned short bits, unsigned short hz);  // 0x4A Запись
+    //void txSetPidTreaty(unsigned short shift, unsigned short bits, unsigned short hz);  // 0x4A Запись
+    void txSetPidFrequency(unsigned short hz);              // 0x4A Запись
     
     void txGetProbes();                                     // 0x50
     void txGetAdcOffset();                                  // 0x51
@@ -286,11 +287,12 @@ class MTools
     static constexpr unsigned short param_bits  = 16U;
     static constexpr unsigned short param_max   = (((0x1ULL << param_bits)-1) >> param_shift);
     static constexpr unsigned short param_mult  = (((0x1ULL << param_bits)) >> (param_bits - param_shift));
-    static constexpr unsigned short param_hz    = 10U;
+    static constexpr unsigned short param_hz    = 100U;
     // Из данных, полученных от драйвера, начальные - по умолчанию
     unsigned short pMult = param_max;
     unsigned short pMax  = param_max;
-    unsigned short pHz   = param_hz;
+    //unsigned short pHz   = param_hz;
+    unsigned short pidHz   = param_hz;
     
     // Расчет множителя
     unsigned short calkPMult(unsigned short shift, unsigned short bits);

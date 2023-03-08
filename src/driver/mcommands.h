@@ -78,7 +78,8 @@ class MCommands
     void doPidGetTreaty();              // 0x47   
     void doPidGetConfigure();           // 0x48   
 //    void doPidSetMaxSum();              // 0x49    nu
-    void doPidSetTreaty();              // 0x4A (резерв)  
+    //void doPidSetTreaty();              // 0x4A (резерв)  
+    void doPidSetFrequency();           // 0x4A
       
         // Команды работы с АЦП
     void doReadProbes();                // 0x50   

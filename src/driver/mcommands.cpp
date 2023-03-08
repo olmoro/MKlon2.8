@@ -90,8 +90,8 @@ void MCommands::doCommand()
       case MCmd::cmd_pid_read_treaty:           doPidGetTreaty();         break;  // 0x47
       case MCmd::cmd_pid_read_configure:        doPidGetConfigure();      break;  // 0x48
       // case MCmd::cmd_pid_write_max_sum:        doPidSetMaxSum();         break;  // 0x49  ?
-      case MCmd::cmd_pid_write_treaty:          doPidSetTreaty();         break;  // 0x4A (резерв)
-
+      //case MCmd::cmd_pid_write_treaty:          doPidSetTreaty();         break;  // 0x4A (резерв)
+      case MCmd::cmd_pid_write_frequency:       doPidSetFrequency();      break;  // 0x4A Задание частоты pid-регулятора
 
         // Команды работы с АЦП
       case MCmd::cmd_adc_read_probes:           doReadProbes();           break;  // 0x50
@@ -411,14 +411,15 @@ short MCommands::dataProcessing()
           // вычисления и запись
         Tools->pMult = Tools->calkPMult(shift, bits);
         Tools->pMax  = Tools->calkPMax(shift, bits);
-        Tools->pHz   = Tools->calkPHz(hz);
+        //Tools->pHz   = Tools->calkPHz(hz);
+        Tools->pidHz   = Tools->calkPHz(hz);
   #ifdef DEBUG_TREATY
     Serial.print("shift: 0x");  Serial.println(shift, HEX);
     Serial.print("bits: 0x");   Serial.println(bits, HEX);
     Serial.print("hz: 0x");     Serial.println(hz, HEX);
     Serial.print("pMult = 0x"); Serial.println(Tools->pMult, HEX);
     Serial.print("pMax = 0x");  Serial.println(Tools->pMax, HEX);
-    Serial.print("pHz = 0x");   Serial.println(Tools->pHz, HEX);
+    Serial.print("pHz = 0x");   Serial.println(Tools->pidHz, HEX);
   #endif
         return 0;                     // Подтверждение
       }
@@ -441,6 +442,17 @@ short MCommands::dataProcessing()
     break;
 
       // case cmd_pid_write_max_sum:         doPidSetMaxSum();           break;  // 0x49   + 0?->0?
+
+
+  //constexpr uint8_t cmd_pid_write_frequency       = 0x4A; //Запись частоты pid-регулятора
+    case MCmd::cmd_pid_write_frequency:
+      if( (Wake->get08(0) == 0) && (Wake->getNbt() == 1) )
+      {
+        return 0;
+      }
+      else  return 1;  // ошибка протокола или нет подтверждения исполнения команды 
+    break;
+
 
       // ================ Команды работы с АЦП =================
       // Чтение АЦП                                        0x50   + 00->07
@@ -885,16 +897,24 @@ void MCommands::doPidGetConfigure()
 //   Wake->configAsk( id, cmd_pid_write_max_sum);
 // }    
 
-// Ввод параметров PID-регулятора для синхронизации            0x4A
-  // !!!! Не исполняется на стороне драйвера. Это резерв !!!!
-void MCommands::doPidSetTreaty() 
+// // Ввод параметров PID-регулятора для синхронизации            0x4A
+//   // !!!! Не исполняется на стороне драйвера. Это резерв !!!!
+// void MCommands::doPidSetTreaty() 
+// {
+//   int id = 0;
+//   // id = Wake->replyU16( id, Tools->paramShift );
+//   // id = Wake->replyU16( id, Tools->pidHz );
+//   Wake->configAsk( id, MCmd::cmd_pid_write_treaty);
+// }
+
+// Ввод частоты PID-регулятора                                    0x4A
+void MCommands::doPidSetFrequency() 
 {
   int id = 0;
-  // id = Wake->replyU16( id, Tools->paramShift );
-  // id = Wake->replyU16( id, Tools->pidHz );
-  Wake->configAsk( id, MCmd::cmd_pid_write_treaty);
+  //id = Wake->replyU16( id, Tools->pidHz );
+  id = Wake->replyU16( id, 0x96 );                  // test
+  Wake->configAsk( id, MCmd::cmd_pid_write_frequency);
 }
-
 
 //================= Команды работы с АЦП =================
 

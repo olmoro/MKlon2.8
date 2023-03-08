@@ -3,7 +3,8 @@
  режимов работы прибора.
 
               !!!!!!!!!!!!!!!!!!!!!!!!!!!! 2022 август
-    Продолжается очистка от мусора проекта-прототипа, который был без драйвера.          
+    Продолжается очистка от мусора проекта-прототипа, который был без драйвера.
+    20230308          
 */
 
 #include "mtools.h"
@@ -305,8 +306,8 @@ void MTools::txSetPidConfig(uint8_t _m, float _kp, float _ki, float _kd, uint16_
 {
   pidMode = _m;
   kp      = (unsigned short) (_kp * pMult);
-  ki      = (unsigned short)((_ki * pMult) / pHz);
-  kd      = (unsigned short)((_kd * pMult) * pHz);
+  ki      = (unsigned short)((_ki * pMult) / pidHz);
+  kd      = (unsigned short)((_kd * pMult) * pidHz);
   minOut  = _minOut;
   maxOut  = _maxOut;
   buffCmd = MCmd::cmd_pid_configure;                                                                 // 0x40 Запись
@@ -316,8 +317,8 @@ void MTools::txSetPidCoeff(unsigned short m, float _kp, float _ki, float _kd)   
 {
     pidMode = m;
     kp      = (unsigned short) (_kp * pMult);
-    ki      = (unsigned short)((_ki * pMult) / pHz);
-    kd      = (unsigned short)((_kd * pMult) * pHz);
+    ki      = (unsigned short)((_ki * pMult) / pidHz);
+    kd      = (unsigned short)((_kd * pMult) * pidHz);
     buffCmd = MCmd::cmd_pid_write_coefficients;                                                      // 0x41 Запись
 }
 
@@ -366,8 +367,8 @@ void MTools::txSetPidReconfig(uint8_t _m, float _kp, float _ki, float _kd, uint1
 {
     pidMode = _m;
     kp      = (unsigned short) (_kp * pMult);
-    ki      = (unsigned short)((_ki * pMult) / pHz);
-    kd      = (unsigned short)((_kd * pMult) * pHz);
+    ki      = (unsigned short)((_ki * pMult) / pidHz);
+    kd      = (unsigned short)((_kd * pMult) * pidHz);
     minOut  = _minOut;
     maxOut  = _maxOut;
     buffCmd = MCmd::cmd_pid_reconfigure;                                                              // 0x43 Запись
@@ -379,13 +380,20 @@ void MTools::txGetPidTreaty()                         {buffCmd = MCmd::cmd_pid_r
 
 void MTools::txGetPidConfig()                         {buffCmd = MCmd::cmd_pid_read_configure;}       // 0x48 get mode, kP, kI, kD, min, max - возвращает параметры текущего режима регулирования
 
-// Ввод параметров PID-регулятора для синхронизации            0x4A (резерв)
-void MTools::txSetPidTreaty(unsigned short shift, unsigned short bits, unsigned short hz)
+// // Ввод параметров PID-регулятора для синхронизации            0x4A (резерв)
+// void MTools::txSetPidTreaty(unsigned short shift, unsigned short bits, unsigned short hz)
+// {
+//     // paramShift = shift;
+//     // paramBits  = bits;
+//     // pidHz      = hz;
+//     buffCmd = MCmd::cmd_pid_write_treaty;                                                             // 0x4A Запись
+// }
+
+// Ввод частоты PID-регулятора                                    0x4A
+void MTools::txSetPidFrequency(unsigned short hz)
 {
-    // paramShift = shift;
-    // paramBits  = bits;
-    // pidHz      = hz;
-    buffCmd = MCmd::cmd_pid_write_treaty;                                                             // 0x4A Запись
+  pidHz   = hz;
+  buffCmd = MCmd::cmd_pid_write_frequency;                                                             // 0x4A Запись
 }
 
   // 0x5A тестовая проверки регулятора разряда 20230210
@@ -460,11 +468,11 @@ unsigned short MTools::calkPMax(unsigned short shift, unsigned short bits)
 }
 
 // Расчет частоты (резерв)
-unsigned short MTools::calkPHz(unsigned short pHz)
+unsigned short MTools::calkPHz(unsigned short pidHz)
 {
-  return pHz;
+  return pidHz;
 }
 
 unsigned short MTools::getPMult() {return pMult;}
 unsigned short MTools::getPMax()  {return pMax;}
-unsigned short MTools::getPHz()   {return pHz;}
+unsigned short MTools::getPHz()   {return pidHz;}

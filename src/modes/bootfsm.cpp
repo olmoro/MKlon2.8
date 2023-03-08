@@ -8,6 +8,7 @@
   соответствующие дефолтные значения. Во время синхронизации на дисплей выводится информация 
   о ходе синхронизации. По окончании процесса синхронизации прибор готов к работе в выбранном режиме.
   14.02.2023 
+  20230308 Получилась весьма громоздкая структура, лучше бы применить очередь.
 */
 
 #include "modes/bootfsm.h"
@@ -40,15 +41,26 @@ namespace MBoot
   MTxPowerStop::MTxPowerStop(MTools * Tools) : MState(Tools) {}
   MState * MTxPowerStop::fsm()
   {
-    Tools->txPowerStop();                                         // 0x21  Команда драйверу
-    return new MTxGetTreaty(Tools);
+    Tools->txPowerStop();                                                     // 0x21  Команда драйверу
+    return new MTxSetFrequency(Tools);
   };
 
+  MTxSetFrequency::MTxSetFrequency(MTools * Tools) : MState(Tools) {}
+  MState * MTxSetFrequency::fsm()
+  {
+    Tools->pidHz = Tools->readNvsShort("device", "freq", fixed);              // Взять сохраненное из nvs.
+    Tools->txSetPidFrequency(Tools->pidHz);                                   // 0x4A  Команда драйверу
+    #ifdef PRINT_BOOT
+      Serial.print("4A*SetFrequency=0x"); Serial.println(Tools->pidHz, HEX);
+    #endif    
+    return new MTxGetTreaty(Tools);
+  };
+  
   // Получить согласованные данные для обмена с драйвером.
   MTxGetTreaty::MTxGetTreaty(MTools * Tools) : MState(Tools) {}
   MState * MTxGetTreaty::fsm()
   {
-    Tools->txGetPidTreaty();                                      // 0x47  Команда драйверу
+    Tools->txGetPidTreaty();                                                  // 0x47  Команда драйверу
     #ifdef PRINT_BOOT
       Serial.println("47*GetTreaty: done");
     #endif
@@ -59,7 +71,7 @@ namespace MBoot
   MTxsetFactorV::MTxsetFactorV(MTools * Tools) : MState(Tools) {}
   MState * MTxsetFactorV::fsm()
   {
-    Tools->factorV = Tools->readNvsShort("device", "factorV", fixed);        // Взять сохраненное из nvs.
+    Tools->factorV = Tools->readNvsShort("device", "factorV", fixed);         // Взять сохраненное из nvs.
     Tools->txSetFactorU(Tools->factorV);                                      // 0x31  Команда драйверу
     #ifdef PRINT_BOOT
       Serial.print("31*SetFactorU=0x");    Serial.println(Tools->factorV, HEX);
@@ -71,7 +83,7 @@ namespace MBoot
   MTxSmoothV::MTxSmoothV(MTools * Tools) : MState(Tools) {}
   MState * MTxSmoothV::fsm()
   {
-    Tools->smoothV = Tools->readNvsShort("device", "smoothV", fixed);        // Взять сохраненное из nvs.
+    Tools->smoothV = Tools->readNvsShort("device", "smoothV", fixed);         // Взять сохраненное из nvs.
     Tools->txSetSmoothU(Tools->smoothV);                                      // 0x34  Команда драйверу
     #ifdef PRINT_BOOT
       Serial.print("34*SetSmoothU=0x");   Serial.println(Tools->smoothV, HEX);
@@ -83,7 +95,7 @@ namespace MBoot
   MTxShiftV::MTxShiftV(MTools * Tools) : MState(Tools) {}
   MState * MTxShiftV::fsm()
   {
-    Tools->shiftV = Tools->readNvsShort("device", "offsetV", fixed);         // Взять сохраненное из nvs.
+    Tools->shiftV = Tools->readNvsShort("device", "offsetV", fixed);          // Взять сохраненное из nvs.
     Tools->txSetShiftU(Tools->shiftV);                                        // 0x36  Команда драйверу
     #ifdef PRINT_BOOT    
       Serial.print("36*SetShiftU=0x");    Serial.println(Tools->shiftV, HEX);
@@ -95,7 +107,7 @@ namespace MBoot
   MTxFactorI::MTxFactorI(MTools * Tools) : MState(Tools) {}
   MState * MTxFactorI::fsm()
   {
-    Tools->factorI = Tools->readNvsShort("device", "factorI", fixed);        // Взять сохраненное из nvs.
+    Tools->factorI = Tools->readNvsShort("device", "factorI", fixed);         // Взять сохраненное из nvs.
     Tools->txSetFactorI(Tools->factorI);                                      // 0x39  Команда драйверу
     #ifdef PRINT_BOOT    
       Serial.print("39*SetFactorI=0x");    Serial.println(Tools->factorI, HEX);
@@ -107,7 +119,7 @@ namespace MBoot
   MTxSmoothI::MTxSmoothI(MTools * Tools) : MState(Tools) {}
   MState * MTxSmoothI::fsm()
   {
-    Tools->smoothI = Tools->readNvsShort("device", "smoothI", fixed);        // Взять сохраненное из nvs.
+    Tools->smoothI = Tools->readNvsShort("device", "smoothI", fixed);         // Взять сохраненное из nvs.
     Tools->txSetSmoothI(Tools->smoothI);                                      // 0x3C  Команда драйверу
     #ifdef PRINT_BOOT
       Serial.print("3C*SetSmoothI=0x");    Serial.println(Tools->smoothI, HEX);
@@ -119,7 +131,7 @@ namespace MBoot
   MTxShiftI::MTxShiftI(MTools * Tools) : MState(Tools) {}
   MState * MTxShiftI::fsm()
   {
-    Tools->shiftI = Tools->readNvsShort("device", "offsetI", fixed);         // Взять сохраненное из nvs.
+    Tools->shiftI = Tools->readNvsShort("device", "offsetI", fixed);          // Взять сохраненное из nvs.
     Tools->txSetShiftI(Tools->shiftI);                                        // 0x3E  Команда драйверу
     #ifdef PRINT_BOOT    
       Serial.print("3C*SetShiftI=0x");    Serial.println(Tools->shiftI, HEX);
@@ -134,7 +146,7 @@ namespace MBoot
   MState * MExit::fsm()
   {
 
-    Tools->txReady();                                        // 0x15  Команда драйверу
+    Tools->txReady();                                                         // 0x15  Команда драйверу
     #ifdef PRINT_BOOT    
       Serial.println("15*Ready: done");
     #endif

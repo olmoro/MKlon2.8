@@ -59,11 +59,11 @@ namespace MCmd
   constexpr uint8_t cmd_pid_read_treaty           = 0x47; // get shift, bits, hz 
   constexpr uint8_t cmd_pid_read_configure        = 0x48; // mode, kP, kI, kD, min, max - возвращает параметры текущего режима регулирования
     //    constexpr uint8_t cmd_pid_write_max_sum         = 0x49; // Задает максимальный интеграл при вычислении шага рег
-  constexpr uint8_t cmd_pid_up_current            = 0x4A; // Для фазы подъема тока - резерв
+  //constexpr uint8_t cmd_pid_up_current            = 0x4A; // Для фазы подъема тока - резерв
   //constexpr uint8_t cmd_set_cooler                = 0x4F; // Задать скорость вентилятора
-  constexpr uint8_t cmd_pid_write_treaty          = 0x4A; // set shift, bits, hz  (резерв)
-
-
+  //constexpr uint8_t cmd_pid_write_treaty          = 0x4A; // set shift, bits, hz  (резерв)
+  constexpr uint8_t cmd_pid_write_frequency       = 0x4A; //Запись частоты pid-регулятора
+  
     // АЦП - настройки
   constexpr uint8_t cmd_adc_read_probes           = 0x50; // Read all probes
   constexpr uint8_t cmd_adc_read_offset           = 0x51; // Читать смещение АЦП

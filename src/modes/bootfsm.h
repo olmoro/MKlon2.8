@@ -41,6 +41,16 @@ namespace MBoot
       MState * fsm() override;
   };
 
+  class MTxSetFrequency : public MState
+  {
+    public:   
+      MTxSetFrequency(MTools * Tools);
+      MState * fsm() override;
+    private:
+      unsigned short freq;
+      static constexpr unsigned short fixed = 100;
+  };
+  
   class MTxGetTreaty : public MState
   {
     public:   

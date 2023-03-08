@@ -104,6 +104,18 @@ namespace MDevice
       static constexpr short below = 0; 
   };
 
+  class MPidFrequency : public MState
+  {
+    public:
+      MPidFrequency(MTools * Tools);
+      MState * fsm() override;
+    private:
+      unsigned short frequency;
+      static constexpr unsigned short fixed = 100;
+      static constexpr unsigned short above = 240;
+      static constexpr unsigned short below =  10;     
+  };
+
   // class MClearAllKeys : public MState
   // {
   //   public:  

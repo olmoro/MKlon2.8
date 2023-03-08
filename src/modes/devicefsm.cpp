@@ -353,7 +353,7 @@ namespace MDevice
     case MKeyboard::P_CLICK: Board->buzzerOn();                               return new MShiftI(Tools);
       // Сохранить и перейти к следующему состоянию    
     case MKeyboard::B_CLICK: Board->buzzerOn();
-      Tools->writeNvsShort("device", "smoothI", smooth);                      return new MExit(Tools);
+      Tools->writeNvsShort("device", "smoothI", smooth);               return new MPidFrequency(Tools);
     case MKeyboard::UP_CLICK: Board->buzzerOn();
       smooth = Tools->updnInt(smooth, below, above, +2); 
       #ifdef PRINTDEVICE
@@ -374,6 +374,58 @@ namespace MDevice
     Display->showAmp (Tools->getRealCurrent(), 3);
     return this;
   };  //MSmoothI
+
+//========================================================================= MPidFrequency
+    // Состояние: "Коррекция коэффициента фильтрации по току".
+  MPidFrequency::MPidFrequency(MTools * Tools) : MState(Tools)
+  {
+    frequency = Tools->readNvsShort("device", "freq", fixed);
+          #ifdef PRINTDEVICE
+            Serial.print("\nsmoothI=0x"); Serial.print(frequency, HEX);
+          #endif
+      // Индикация
+    Display->showMode((char*)"  FREQUENCY +/-   ");
+    Display->showHelp((char*)" P-SHIFT_I B-SAVE ");
+    Board->ledsGreen();                                               // Подтверждение
+  }
+  MState * MPidFrequency::fsm()
+  {
+    switch (Keyboard->getKey())
+    {
+      // Отказ от продолжения ввода параметров - стоп
+    case MKeyboard::C_LONG_CLICK: Board->buzzerOn();                          return new MStop(Tools);
+      // Вернуться
+    case MKeyboard::P_CLICK: Board->buzzerOn();                               return new MShiftI(Tools);
+      // Сохранить и перейти к следующему состоянию    
+    case MKeyboard::B_CLICK: Board->buzzerOn();
+      Tools->writeNvsShort("device", "freq", frequency);                      return new MExit(Tools);
+    case MKeyboard::UP_CLICK: Board->buzzerOn();
+      frequency = Tools->updnInt(frequency, below, above, +10); 
+      #ifdef PRINTDEVICE
+        Serial.print("\nfrequency=0x"); Serial.print(frequency, HEX);
+      #endif           
+      Tools->txSetPidFrequency(frequency);                                    // 0x4A Команда драйверу
+      break;
+    case MKeyboard::DN_CLICK: Board->buzzerOn();
+      frequency = Tools->updnInt(frequency, below, above, -10); 
+      #ifdef PRINTDEVICE
+        Serial.print("\nfrequency=0x"); Serial.print(frequency, HEX);
+      #endif
+      Tools->txSetPidFrequency(frequency);                                   // 0x4A Команда драйверу
+      break;
+    default:;
+    }
+    Display->showVolt(Tools->getRealVoltage(), 3);
+    //Display->showAmp (Tools->getRealCurrent(), 3);
+        Display->showPidI(frequency, 0);
+
+    return this;
+  };  //MPidFrequency
+
+
+
+
+
 
 // C:\Users\olmor\.platformio\packages\framework-arduinoespressif32@3.10006.210326\libraries\Preferences
   // MClearAllKeys::MClearAllKeys(MTools * Tools) : MState(Tools)
