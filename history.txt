@@ -246,4 +246,5 @@ PID: 0.56 1.79 0.09
 
 10:40 08.03.2023
 В boot добавлена загрузка частоты пид-регулятора
-Tools->txSetPidFrequency(Tools->pidHz);   // 0x4A
+Tools->txSetPidFrequency(Tools->pidHz);   // 0x4A         - ??
+Файл с текстом описания процесса влючения новой командыь драйверу.
