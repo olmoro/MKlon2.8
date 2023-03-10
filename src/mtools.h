@@ -56,6 +56,8 @@ class MTools
     short smoothI   = 0x0004;   // Коэффициент фильтрации
     short shiftI    = 0x0000;   // Начальное смещение в миллиамперах
 
+
+
     // ========== Управление ПИД-регулятором, частота фиксирована ==========
 
     // Pid parameters (значения остались от тестирования)
@@ -292,7 +294,8 @@ class MTools
     unsigned short pMult = param_max;
     unsigned short pMax  = param_max;
     //unsigned short pHz   = param_hz;
-    unsigned short pidHz   = param_hz;
+    //unsigned short pidHz   = param_hz;
+    short pidHz   = param_hz;
     
     // Расчет множителя
     unsigned short calkPMult(unsigned short shift, unsigned short bits);

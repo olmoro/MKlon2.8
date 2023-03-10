@@ -110,7 +110,7 @@ namespace MDevice
       MPidFrequency(MTools * Tools);
       MState * fsm() override;
     private:
-      unsigned short frequency;
+      short frequency;
       static constexpr unsigned short fixed = 100;
       static constexpr unsigned short above = 240;
       static constexpr unsigned short below =  10;     

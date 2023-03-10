@@ -911,8 +911,8 @@ void MCommands::doPidGetConfigure()
 void MCommands::doPidSetFrequency() 
 {
   int id = 0;
-  //id = Wake->replyU16( id, Tools->pidHz );
-  id = Wake->replyU16( id, 0x96 );                  // test
+  id = Wake->replyU16( id, Tools->pidHz );
+  //id = Wake->replyU16( id, 0x96 );                  // test
   Wake->configAsk( id, MCmd::cmd_pid_write_frequency);
 }
 

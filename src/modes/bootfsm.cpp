@@ -8,16 +8,12 @@
   соответствующие дефолтные значения. Во время синхронизации на дисплей выводится информация 
   о ходе синхронизации. По окончании процесса синхронизации прибор готов к работе в выбранном режиме.
   14.02.2023 
-  20230308 Получилась весьма громоздкая структура, лучше бы применить очередь.
+  20230310 Это только заготовка - нет проверок и при необходимости повторных обращений
 */
 
 #include "modes/bootfsm.h"
-#include "mdispatcher.h"
 #include "mtools.h"
-#include "mcmd.h"
 #include "board/mboard.h"
-#include "board/msupervisor.h"
-#include "measure/mkeyboard.h"
 #include "display/mdisplay.h"
 #include <Arduino.h>
 #include <string>
@@ -28,7 +24,6 @@ namespace MBoot
   MStart::MStart(MTools * Tools) : MState(Tools) 
   {
     Board->ledsBlue();            // Подтверждение входа синим свечением светодиода как и любой загрузки
-//    Tools->Keyboard->getKey(MKeyboard::UP_CLICK);
   }
   MState * MStart::fsm()
   {
@@ -48,10 +43,10 @@ namespace MBoot
   MTxSetFrequency::MTxSetFrequency(MTools * Tools) : MState(Tools) {}
   MState * MTxSetFrequency::fsm()
   {
-    Tools->pidHz = Tools->readNvsShort("device", "freq", fixed);              // Взять сохраненное из nvs.
-    Tools->txSetPidFrequency(Tools->pidHz);                                   // 0x4A  Команда драйверу
+    hz = Tools->readNvsShort("device", "freq", fixed);              // Взять сохраненное из nvs.
+    Tools->txSetPidFrequency(hz);                                   // 0x4A  Команда драйверу
     #ifdef PRINT_BOOT
-      Serial.print("4A*SetFrequency=0x"); Serial.println(Tools->pidHz, HEX);
+      Serial.print("4A*SetFrequency=0x"); Serial.println(hz, HEX);
     #endif    
     return new MTxGetTreaty(Tools);
   };

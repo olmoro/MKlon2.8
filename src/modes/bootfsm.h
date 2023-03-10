@@ -47,7 +47,7 @@ namespace MBoot
       MTxSetFrequency(MTools * Tools);
       MState * fsm() override;
     private:
-      unsigned short freq;
+      unsigned short hz;
       static constexpr unsigned short fixed = 100;
   };
   
