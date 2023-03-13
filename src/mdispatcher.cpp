@@ -18,7 +18,7 @@
 #include "modes/templatefsm.h"
 #include "modes/cccvfsm.h"
 #include "modes/cccvtfsm.h"
-#include "modes/dischargefsm.h"
+//#include "modes/dischargefsm.h"
 #include "modes/devicefsm.h"
 #include "Arduino.h"
 
@@ -95,7 +95,7 @@ void MDispatcher::run()
           case TEMPLATE:    State = new Template::MStart(Tools);  break;
           case CCCV:        State = new MCccv::MStart(Tools);     break;
           case CCCVT:       State = new MCccvt::MStart(Tools);    break;
-          case DISCHARGE:   State = new MDisch::MStart(Tools);    break;
+          //case DISCHARGE:   State = new MDisch::MStart(Tools);    break;
           case DEVICE:      State = new MDevice::MStart(Tools);   break;
           default:                                                break;
         }
@@ -167,10 +167,10 @@ void MDispatcher::textMode(short modeSelection)
       sprintf(sHelp, "     B-SELECT      ");
     break;
 
-    case DISCHARGE:
-      sprintf(sMode, "    DISCHARGE:     ");
-      sprintf(sHelp, "     B-SELECT      ");
-    break;
+    // case DISCHARGE:
+    //   sprintf(sMode, "    DISCHARGE:     ");
+    //   sprintf(sHelp, "     B-SELECT      ");
+    // break;
 
     case DEVICE:
       sprintf(sMode, "      DEVICE:      ");   // Настройки с доступом (?) разработчика (заводской доступ)

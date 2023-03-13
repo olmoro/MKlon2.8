@@ -213,7 +213,7 @@ namespace MDPid
     //Display->showMode((char*)"  D-SP = ", sp);
     Display->showMode((char*)"  D-SP = ", -sp);
     (Tools->getState() == Tools->getStatusPidDiscurrent()) ? 
-      Board->ledsGreen() : Board->ledsRed();
+                                        Board->ledsGreen() : Board->ledsRed();
   //Serial.print("state=0x"); Serial.println(Tools->getState(), HEX);
     Display->showDuration(Tools->getChargeTimeCounter(), MDisplay::SEC);
     Display->showAh(Tools->getAhCharge());
@@ -241,33 +241,33 @@ namespace MDPid
         Tools->writeNvsFloat("pidtest", "kpD", kp);     return new MLoadKi(Tools);
       case MKeyboard::B_LONG_CLICK: Board->buzzerOn();  return new MSaveProf(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, 0.01f);
+        kp = Tools->updnFloat(kp, dn, up, 0.1f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;     
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, 0.10f);
+        kp = Tools->updnFloat(kp, dn, up, 1.0f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, -0.01f);
+        kp = Tools->updnFloat(kp, dn, up, -0.1f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, -0.10f);
+        kp = Tools->updnFloat(kp, dn, up, -1.0f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
         // Включить (0x24)или отключить (0x21) разряд
       case MKeyboard::C_CLICK: Board->buzzerOn();
         (Tools->getState() == Tools->getStatusPidDiscurrent()) ? 
-          Tools->txPowerStop() : Tools->txDischargeGo(sp); // Ток задать любой
+                                          Tools->txPowerStop() : Tools->txDischargeGo(sp);
         break;
       default:;
     }
-    Display->showPidI(kp, 2);
+    Display->showPidI(kp, 1);
     Display->showAmp(Tools->getRealCurrent(), 3);
     Display->showMode((char*)"        KP         ");
     (Tools->getState() == Tools->getStatusPidDiscurrent()) ? 
-      Board->ledsGreen() : Board->ledsRed();
+                                        Board->ledsGreen() : Board->ledsRed();
     Display->showDuration(Tools->getChargeTimeCounter(), MDisplay::SEC);
     Display->showAh(Tools->getAhCharge());
     return this;
@@ -294,37 +294,33 @@ namespace MDPid
         Tools->writeNvsFloat("pidtest", "kiD", ki);     return new MLoadKd(Tools);
       case MKeyboard::B_LONG_CLICK: Board->buzzerOn();  return new MSaveProf(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, 0.01f);
+        ki = Tools->updnFloat(ki, dn, up, 0.1f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;     
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, 0.10f);
+        ki = Tools->updnFloat(ki, dn, up, 1.0f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, -0.01f);
+        ki = Tools->updnFloat(ki, dn, up, -0.1f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, -0.10f);
+        ki = Tools->updnFloat(ki, dn, up, -1.0f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
         // Включить (0x24)или отключить (0x21) подачу напряжения на клеммы
       case MKeyboard::C_CLICK: Board->buzzerOn();
         (Tools->getState() == Tools->getStatusPidDiscurrent()) ? 
-          Tools->txPowerStop() : Tools->txDischargeGo(sp); // Ток задать любой
-
-
-
-
+                                          Tools->txPowerStop() : Tools->txDischargeGo(sp);
         break;
       default:;
     }
-    Display->showPidI(ki, 2);
+    Display->showPidI(ki, 1);
     Display->showAmp(Tools->getRealCurrent(), 3);
     Display->showMode((char*)"        KI         ");
     (Tools->getState() == Tools->getStatusPidDiscurrent()) ? 
-      Board->ledsGreen() : Board->ledsRed();
+                                        Board->ledsGreen() : Board->ledsRed();
     Display->showDuration(Tools->getChargeTimeCounter(), MDisplay::SEC);
     Display->showAh(Tools->getAhCharge());
     return this;
@@ -335,8 +331,7 @@ namespace MDPid
   //========== MLoadKd, ввод параметра KD PID-регулятора разряда ==================
   MLoadKd::MLoadKd(MTools * Tools) : MState(Tools)
   {
-      // Индикация 
-    Display->showHelp((char*)"  P*-SP B*-SAVE   ");
+    Display->showHelp((char*)"  P*-SP B*-SAVE   ");     // Индикация 
   }
   MState * MLoadKd::fsm()
   {
@@ -351,33 +346,33 @@ namespace MDPid
         Tools->writeNvsFloat("pidtest", "kdD", kd);     return new MLoadSp(Tools);
       case MKeyboard::B_LONG_CLICK: Board->buzzerOn();  return new MSaveProf(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, 0.01f);
+        kd = Tools->updnFloat(kd, dn, up, 0.1f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;     
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, 0.10f);
+        kd = Tools->updnFloat(kd, dn, up, 1.0f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, -0.01f);
+        kd = Tools->updnFloat(kd, dn, up, -0.1f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, -0.10f);
+        kd = Tools->updnFloat(kd, dn, up, -1.0f);
         Tools->txSetPidCoeffD(kp, ki, kd);
         break;
         // Включить (0x24)или отключить (0x21) подачу напряжения на клеммы
       case MKeyboard::C_CLICK: Board->buzzerOn();
         (Tools->getState() == Tools->getStatusPidDiscurrent()) ? 
-          Tools->txPowerStop() : Tools->txDischargeGo(sp); // Ток задать любой
+                                          Tools->txPowerStop() : Tools->txDischargeGo(sp);
         break;
       default:;
     }
-    Display->showPidI(kd, 2);
+    Display->showPidI(kd, 1);
     Display->showAmp(Tools->getRealCurrent(), 3);
     Display->showMode((char*)"        KD         ");
     (Tools->getState() == Tools->getStatusPidDiscurrent()) ? 
-      Board->ledsGreen() : Board->ledsRed();
+                                        Board->ledsGreen() : Board->ledsRed();
     Display->showDuration(Tools->getChargeTimeCounter(), MDisplay::SEC);
     Display->showAh(Tools->getAhCharge());
     return this;

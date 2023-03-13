@@ -73,6 +73,9 @@ namespace MUPid
     Tools->txPowerStop();                               // Команда перейти в безопасный режим (0x21)
     Display->showMode((char*)"       U-PID       ");    // Произведен вход в U-PID
     Display->showHelp((char*)"  C-GO    C*-EXIT  ");    // Подсказка
+        
+        Tools->showAmp(Tools->getRealCurrent(), 3, 5);
+
     Board->ledsOn();                                    // Подтверждение входа белым свечением
     cnt = 7;                                            // Счетчик нажатий для очистки
 
@@ -257,14 +260,14 @@ Serial.print("ParamMult=0x");   Serial.println(Tools->getParamMult(), HEX);
         // Serial.print("statusV=0x");   Serial.println(Tools->getStatusPidVoltage(), HEX);
         // Serial.print("state=0x");   Serial.println( Tools->getState(), HEX);
         (Tools->getState() == Tools->getStatusPidVoltage()) ? 
-          Tools->txPowerStop() : Tools->txPowerMode(sp, 2.0, MODE_V); // Ток задать любой
+                                       Tools->txPowerStop() : Tools->txPowerMode(sp, 2.0, MODE_V); // Ток задать любой
         break;
       default:;
     }
       // Индикация, которая могла измениться при исполнении.
     Display->showMode((char*)"  U-SP = ", sp);
     (Tools->getState() == Tools->getStatusPidVoltage()) ? 
-      Board->ledsGreen() : Board->ledsRed();
+                                     Board->ledsGreen() : Board->ledsRed();
   //Serial.print("state=0x"); Serial.println(Tools->getState(), HEX);
     Display->showDuration(Tools->getChargeTimeCounter(), MDisplay::SEC);
     Display->showAh(Tools->getAhCharge());
@@ -292,33 +295,33 @@ Serial.print("ParamMult=0x");   Serial.println(Tools->getParamMult(), HEX);
         Tools->writeNvsFloat("pidtest", "kpV", kp);     return new MLoadKi(Tools);
       case MKeyboard::B_LONG_CLICK: Board->buzzerOn();  return new MSaveProf(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, 0.01f);
+        kp = Tools->updnFloat(kp, dn, up, 0.1f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;     
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, 0.10f);
+        kp = Tools->updnFloat(kp, dn, up, 1.0f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, -0.01f);
+        kp = Tools->updnFloat(kp, dn, up, -0.1f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, -0.10f);
+        kp = Tools->updnFloat(kp, dn, up, -1.0f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
         // Включить (0x22 )или отключить (0x21) подачу напряжения на клеммы
       case MKeyboard::C_CLICK: Board->buzzerOn();
         (Tools->getState() == Tools->getStatusPidVoltage()) ? 
-          Tools->txPowerStop() : Tools->txPowerMode(sp, 2.0, MODE_V); // Ток задать любой
+                                       Tools->txPowerStop() : Tools->txPowerMode(sp, 2.0, MODE_V); // Ток задать любой
         break;
       default:;
     }
     Display->showVolt(Tools->getRealVoltage(), 3);
-    Display->showPidV(kp, 2);
+    Display->showPidV(kp, 1);
     Display->showMode((char*)"        KP         ");
     (Tools->getState() == Tools->getStatusPidVoltage()) ? 
-      Board->ledsGreen() : Board->ledsRed();
+                                     Board->ledsGreen() : Board->ledsRed();
     Display->showDuration(Tools->getChargeTimeCounter(), MDisplay::SEC);
     Display->showAh(Tools->getAhCharge());
     return this;
@@ -345,25 +348,25 @@ Serial.print("ParamMult=0x");   Serial.println(Tools->getParamMult(), HEX);
         Tools->writeNvsFloat("pidtest", "kiV", ki);     return new MLoadKd(Tools);
       case MKeyboard::B_LONG_CLICK: Board->buzzerOn();  return new MSaveProf(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, 0.01f);
+        ki = Tools->updnFloat(ki, dn, up, 0.1f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;     
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, 0.10f);
+        ki = Tools->updnFloat(ki, dn, up, 1.0f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, -0.01f);
+        ki = Tools->updnFloat(ki, dn, up, -0.1f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, -0.10f);
+        ki = Tools->updnFloat(ki, dn, up, -1.0f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
         // Включить (0x22 )или отключить (0x21) подачу напряжения на клеммы
       case MKeyboard::C_CLICK: Board->buzzerOn();
         (Tools->getState() == Tools->getStatusPidVoltage()) ? 
-          Tools->txPowerStop() : Tools->txPowerMode(sp, 2.0, MODE_V); // Ток задать любой
+                                       Tools->txPowerStop() : Tools->txPowerMode(sp, 2.0, MODE_V); // Ток задать любой
 
   //     tmp = ki * Tools->pMult;
   // Serial.print("parKI=0x");  Serial.println((short) tmp, HEX);
@@ -372,10 +375,10 @@ Serial.print("ParamMult=0x");   Serial.println(Tools->getParamMult(), HEX);
       default:;
     }
     Display->showVolt(Tools->getRealVoltage(), 3);
-    Display->showPidV(ki, 2);
+    Display->showPidV(ki, 1);
     Display->showMode((char*)"        KI         ");
     (Tools->getState() == Tools->getStatusPidVoltage()) ? 
-      Board->ledsGreen() : Board->ledsRed();
+                                     Board->ledsGreen() : Board->ledsRed();
     Display->showDuration(Tools->getChargeTimeCounter(), MDisplay::SEC);
     Display->showAh(Tools->getAhCharge());
     return this;
@@ -402,33 +405,33 @@ Serial.print("ParamMult=0x");   Serial.println(Tools->getParamMult(), HEX);
         Tools->writeNvsFloat("pidtest", "kdV", kd);     return new MLoadSp(Tools);
       case MKeyboard::B_LONG_CLICK: Board->buzzerOn();  return new MSaveProf(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, 0.01f);
+        kd = Tools->updnFloat(kd, dn, up, 0.1f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;     
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, 0.10f);
+        kd = Tools->updnFloat(kd, dn, up, 1.0f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, -0.01f);
+        kd = Tools->updnFloat(kd, dn, up, -0.1f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, -0.10f);
+        kd = Tools->updnFloat(kd, dn, up, -1.0f);
         Tools->txSetPidCoeffV(kp, ki, kd);
         break;
         // Включить (0x22 )или отключить (0x21) подачу напряжения на клеммы
       case MKeyboard::C_CLICK: Board->buzzerOn();
         (Tools->getState() == Tools->getStatusPidVoltage()) ? 
-          Tools->txPowerStop() : Tools->txPowerMode(sp, 2.0, MODE_V); // Ток задать любой
+                                       Tools->txPowerStop() : Tools->txPowerMode(sp, 2.0, MODE_V); // Ток задать любой
         break;
       default:;
     }
     Display->showVolt(Tools->getRealVoltage(), 3);
-    Display->showPidV(kd, 2);
+    Display->showPidV(kd, 1);
     Display->showMode((char*)"        KD         ");
     (Tools->getState() == Tools->getStatusPidVoltage()) ? 
-      Board->ledsGreen() : Board->ledsRed();
+                                     Board->ledsGreen() : Board->ledsRed();
     Display->showDuration(Tools->getChargeTimeCounter(), MDisplay::SEC);
     Display->showAh(Tools->getAhCharge());
     return this;
@@ -501,7 +504,8 @@ Serial.print("ParamMult=0x");   Serial.println(Tools->getParamMult(), HEX);
     default:;
     }
     Display->showVolt(Tools->getRealVoltage(), 3);
-    Display->showAmp (Tools->getRealCurrent(), 3);
+    //Display->showAmp (Tools->getRealCurrent(), 3);
+    Tools->showAmp(Tools->getRealCurrent(), 3, 2);
     return this;
   };
 

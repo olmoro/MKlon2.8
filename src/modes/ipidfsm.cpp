@@ -231,7 +231,7 @@ namespace MIPid
       case MKeyboard::P_CLICK: Board->buzzerOn();       return new MSaveProf(Tools);
         // Далее UP/DOWN сетпойнта по току 
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        sp = Tools->updnFloat(sp, dn, up, 0.1f);
+        sp = Tools->updnFloat(sp, dn, up, 0.05f);
         Tools->txPowerMode(10.0, sp, MODE_I);
         break;
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
@@ -239,7 +239,7 @@ namespace MIPid
         Tools->txPowerMode(10.0, sp, MODE_I);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        sp = Tools->updnFloat(sp, dn, up, -0.1f);
+        sp = Tools->updnFloat(sp, dn, up, -0.05f);
         Tools->txPowerMode(10.0, sp, MODE_I);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
@@ -259,7 +259,7 @@ namespace MIPid
       // Индикация, которая могла измениться при исполнении.
     Display->showMode((char*)"  I-SP = ", sp);
     (Tools->getState() == Tools->getStatusPidCurrent()) ? 
-      Board->ledsGreen() : Board->ledsRed();
+                                    Board->ledsGreen() : Board->ledsRed();
   //Serial.print("state=0x"); Serial.println(Tools->getState(), HEX);
     Display->showDuration(Tools->getChargeTimeCounter(), MDisplay::SEC);
     Display->showAh(Tools->getAhCharge());
@@ -287,19 +287,19 @@ namespace MIPid
         Tools->writeNvsFloat("pidtest", "kpI", kp);     return new MLoadKi(Tools);
       case MKeyboard::B_LONG_CLICK: Board->buzzerOn();  return new MSaveProf(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, 0.01f);
+        kp = Tools->updnFloat(kp, dn, up, 0.1f);
         Tools->txSetPidCoeffI(kp, ki, kd);
         break;     
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, 0.10f);
+        kp = Tools->updnFloat(kp, dn, up, 1.00f);
         Tools->txSetPidCoeffI(kp, ki, kd);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, -0.01f);
+        kp = Tools->updnFloat(kp, dn, up, -0.1f);
         Tools->txSetPidCoeffI(kp, ki, kd);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
-        kp = Tools->updnFloat(kp, dn, up, -0.10f);
+        kp = Tools->updnFloat(kp, dn, up, -1.0f);
         Tools->txSetPidCoeffI(kp, ki, kd);
         break;
         // Включить (0x22 )или отключить (0x21) подачу напряжения на клеммы
@@ -309,7 +309,7 @@ namespace MIPid
         break;
       default:;
     }
-    Display->showPidI(kp, 2);
+    Display->showPidI(kp, 1);
     Display->showAmp(Tools->getRealCurrent(), 3);
     Display->showMode((char*)"        KP         ");
     (Tools->getState() == Tools->getStatusPidCurrent()) ? 
@@ -340,19 +340,19 @@ namespace MIPid
         Tools->writeNvsFloat("pidtest", "kiI", ki);     return new MLoadKd(Tools);
       case MKeyboard::B_LONG_CLICK: Board->buzzerOn();  return new MSaveProf(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, 0.01f);
+        ki = Tools->updnFloat(ki, dn, up, 0.1f);
         Tools->txSetPidCoeffI(kp, ki, kd);
         break;     
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, 0.10f);
+        ki = Tools->updnFloat(ki, dn, up, 1.0f);
         Tools->txSetPidCoeffI(kp, ki, kd);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, -0.01f);
+        ki = Tools->updnFloat(ki, dn, up, -0.1f);
         Tools->txSetPidCoeffI(kp, ki, kd);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
-        ki = Tools->updnFloat(ki, dn, up, -0.10f);
+        ki = Tools->updnFloat(ki, dn, up, -1.0f);
         Tools->txSetPidCoeffI(kp, ki, kd);
         break;
         // Включить (0x22 )или отключить (0x21) подачу напряжения на клеммы
@@ -366,7 +366,7 @@ namespace MIPid
         break;
       default:;
     }
-    Display->showPidI(ki, 2);
+    Display->showPidI(ki, 1);
     Display->showAmp(Tools->getRealCurrent(), 3);
     Display->showMode((char*)"        KI         ");
     (Tools->getState() == Tools->getStatusPidCurrent()) ? 
@@ -397,19 +397,19 @@ namespace MIPid
         Tools->writeNvsFloat("pidtest", "kdI", kd);     return new MLoadSp(Tools);
       case MKeyboard::B_LONG_CLICK: Board->buzzerOn();  return new MSaveProf(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, 0.01f);
+        kd = Tools->updnFloat(kd, dn, up, 0.1f);
         Tools->txSetPidCoeffI(kp, ki, kd);
         break;     
       case MKeyboard::UP_LONG_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, 0.10f);
+        kd = Tools->updnFloat(kd, dn, up, 1.0f);
         Tools->txSetPidCoeffI(kp, ki, kd);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, -0.01f);
+        kd = Tools->updnFloat(kd, dn, up, -0.1f);
         Tools->txSetPidCoeffI(kp, ki, kd);
         break;
       case MKeyboard::DN_LONG_CLICK: Board->buzzerOn();
-        kd = Tools->updnFloat(kd, dn, up, -0.10f);
+        kd = Tools->updnFloat(kd, dn, up, -1.0f);
         Tools->txSetPidCoeffI(kp, ki, kd);
         break;
         // Включить (0x22 )или отключить (0x21) подачу напряжения на клеммы
@@ -419,7 +419,7 @@ namespace MIPid
         break;
       default:;
     }
-    Display->showPidI(kd, 2);
+    Display->showPidI(kd, 1);
     Display->showAmp(Tools->getRealCurrent(), 3);
     Display->showMode((char*)"        KD         ");
     (Tools->getState() == Tools->getStatusPidCurrent()) ? 

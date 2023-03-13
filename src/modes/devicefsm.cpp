@@ -379,9 +379,11 @@ namespace MDevice
     // Состояние: "Коррекция частоты ПИД-регулятора".
   MPidFrequency::MPidFrequency(MTools * Tools) : MState(Tools)
   {
-    frequency = Tools->readNvsShort("device", "freq", fixed);
+    i = Tools->readNvsShort("device", "freq", fixed);
+    if(i <= dn) i = dn;
+    if(i >= up) i = up;
           #ifdef PRINTDEVICE
-            Serial.print("\nNVS_freq=0x"); Serial.print(frequency, HEX);
+            Serial.print("\nNVS_freq=0x"); Serial.print(i, HEX);
           #endif
       // Индикация
     Display->showMode((char*)"  FREQUENCY +/-   ");
@@ -398,30 +400,30 @@ namespace MDevice
     case MKeyboard::P_CLICK: Board->buzzerOn();                       return new MShiftI(Tools);
       // Сохранить и перейти к следующему состоянию    
     case MKeyboard::B_CLICK: Board->buzzerOn();
-      Tools->writeNvsShort("device", "freq", frequency);
-      Tools->txSetPidFrequency(frequency);                            // 0x4A Команда драйверу
+      Tools->writeNvsShort("device", "freq", i);
+      Tools->txSetPidFrequency(freq[i]);                            // 0x4A Команда драйверу
                                                                       return new MExit(Tools);
     case MKeyboard::UP_CLICK: Board->buzzerOn();
-      frequency = Tools->updnInt(frequency, below, above, +10); 
-      //Tools->writeNvsShort("device", "freq", frequency);
+      i = Tools->updnInt(i, dn, up, +1); 
+      //Tools->writeNvsShort("device", "freq", i);
       #ifdef PRINTDEVICE
-        Serial.print("\nfrequency=0x"); Serial.println(frequency, HEX);
+        Serial.print("\nfrequency="); Serial.println(freq[i]);
       #endif           
       //Tools->txSetPidFrequency(frequency);                                    // 0x4A Команда драйверу
       break;
     case MKeyboard::DN_CLICK: Board->buzzerOn();
-      frequency = Tools->updnInt(frequency, below, above, -10);
-      //Tools->writeNvsShort("device", "freq", frequency); 
+      i = Tools->updnInt(i, dn, up, -1);
+      //Tools->writeNvsShort("device", "freq", freq[i]); 
       #ifdef PRINTDEVICE
-        Serial.print("\nfrequency=0x"); Serial.println(frequency, HEX);
+        Serial.print("\nfrequency="); Serial.println(freq[i]);
       #endif
-      //Tools->txSetPidFrequency(frequency);                                   // 0x4A Команда драйверу
+      //Tools->txSetPidFrequency(freq[i]);                                   // 0x4A Команда драйверу
       break;
     default:;
     }
     Display->showVolt(Tools->getRealVoltage(), 3);
     //Display->showAmp (Tools->getRealCurrent(), 3);
-    Display->showPidI((float)frequency, 0);
+    Display->showPidI((float)freq[i], 0);
     return this;
   };  //MPidFrequency
 

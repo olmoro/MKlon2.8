@@ -47,8 +47,9 @@ namespace MBoot
       MTxSetFrequency(MTools * Tools);
       MState * fsm() override;
     private:
-      unsigned short hz;
-      static constexpr unsigned short fixed = 100;
+      short freq[6]{ 10, 20, 50, 100, 200, 250 };
+      short i;
+      static constexpr short fixed = 3;
   };
   
   class MTxGetTreaty : public MState

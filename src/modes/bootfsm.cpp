@@ -43,10 +43,11 @@ namespace MBoot
   MTxSetFrequency::MTxSetFrequency(MTools * Tools) : MState(Tools) {}
   MState * MTxSetFrequency::fsm()
   {
-    hz = Tools->readNvsShort("device", "freq", fixed);              // Взять сохраненное из nvs.
-    Tools->txSetPidFrequency(hz);                                   // 0x4A  Команда драйверу
+    i = Tools->readNvsShort("device", "freq", fixed);                 // Взять сохраненное из nvs.
+    if(i <= 0) i = 0;      if(i >= 5) i = 5;
+    Tools->txSetPidFrequency(freq[i]);                                // 0x4A  Команда драйверу
     #ifdef PRINT_BOOT
-      Serial.print("4A*SetFrequency=0x"); Serial.println(hz, HEX);
+      Serial.print("4A*SetFrequency=0x"); Serial.println(freq[i], HEX);
     #endif    
     return new MTxGetTreaty(Tools);
   };

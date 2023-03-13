@@ -50,12 +50,14 @@ unsigned short MTools::getPostpone()            {return postpone;}
 
 
   // Напряжение и ток без преобразования
+short beautyV = 2; 
+
 void MTools::setMilliVolt(short val)
 {
   // (sum += val - (sum >> beauty)) >> beauty
   static int32_t sum = 0;
-  short beauty = 2;
-  val = (sum += val - (sum >> beauty)) >> beauty;
+  //beautyV = 2;
+  val = (sum += val - (sum >> beautyV)) >> beautyV;
 
   milliVolt = val;
   voltage = (float)val / 1000;
@@ -63,12 +65,14 @@ void MTools::setMilliVolt(short val)
 
 short MTools::getMilliVolt()                  {return milliVolt;}
 
+short beautyI = 2; 
+
 void MTools::setMilliAmper(short val)
 {
   // (sum += val - (sum >> beauty)) >> beauty
   static int32_t sum = 0;
-  short beauty = 2;
-  val = (sum += val - (sum >> beauty)) >> beauty;
+  //beautyI = 2;
+  val = (sum += val - (sum >> beautyI)) >> beautyI;
  
   milliAmper = val;
   current = (float)val / 1000;
@@ -476,3 +480,17 @@ unsigned short MTools::calkPHz(unsigned short pidHz)
 unsigned short MTools::getPMult() {return pMult;}
 unsigned short MTools::getPMax()  {return pMax;}
 unsigned short MTools::getPHz()   {return pidHz;}
+
+
+    // Дисплей 20230311
+
+void MTools::showAmp(float amp, uint8_t pls)
+{
+  Display->showAmp(amp, pls);
+}
+ 
+void MTools::showAmp(float amp, uint8_t pls, short filtr)
+{
+  beautyI = filtr;
+  Display->showAmp(amp, pls);
+}

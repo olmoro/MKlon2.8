@@ -176,12 +176,12 @@ namespace MCccv
         // Увеличить значение на указанную величину
       case MKeyboard::UP_CLICK:  Board->buzzerOn(); 
       case MKeyboard::UP_AUTO_CLICK:  
-        maxI = Tools->updnFloat(maxI, below, above, 0.1f);
+        maxI = Tools->updnFloat(maxI, dn, up, 0.1f);
         break;
         // Уменьшить значение на указанную величину
       case MKeyboard::DN_CLICK: Board->buzzerOn();
       case MKeyboard::DN_AUTO_CLICK:  
-        maxI = Tools->updnFloat(maxI, below, above, -0.1f);
+        maxI = Tools->updnFloat(maxI, dn, up, -0.1f);
         break;
       default:;
     }
@@ -214,12 +214,12 @@ namespace MCccv
         // Увеличить значение на указанную величину
       case MKeyboard::UP_CLICK: Board->buzzerOn();
       case MKeyboard::UP_AUTO_CLICK:  
-        maxV = Tools->updnFloat(maxV, below, above, 0.1f);
+        maxV = Tools->updnFloat(maxV, dn, up, 0.1f);
         break;
         // Уменьшить значение на указанную величину
       case MKeyboard::DN_CLICK: Board->buzzerOn(); 
       case MKeyboard::DN_AUTO_CLICK: 
-        maxV = Tools->updnFloat(maxV, below, above, -0.1f);
+        maxV = Tools->updnFloat(maxV, dn, up, -0.1f);
         break;
       default:;
     }
@@ -251,11 +251,11 @@ namespace MCccv
         Tools->writeNvsFloat("cccv", "minI", minI);                           return new MSetVoltageMin(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
       case MKeyboard::UP_AUTO_CLICK:
-        minI = Tools->updnFloat(minI, below, above, 0.1f);
+        minI = Tools->updnFloat(minI, dn, up, 0.1f);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
       case MKeyboard::DN_AUTO_CLICK:
-        minI = Tools->updnFloat(minI, below, above, -0.1f);
+        minI = Tools->updnFloat(minI, dn, up, -0.1f);
         break;
       default:;
     }
@@ -287,11 +287,11 @@ namespace MCccv
         Tools->writeNvsFloat( "cccv", "minV", minV );                         return new MPostpone(Tools);
       case MKeyboard::UP_CLICK: Board->buzzerOn();
       case MKeyboard::UP_AUTO_CLICK:
-        minV = Tools->updnFloat(minV, below, above, 0.1f);
+        minV = Tools->updnFloat(minV, dn, up, 0.1f);
         break;
       case MKeyboard::DN_CLICK: Board->buzzerOn();
       case MKeyboard::DN_AUTO_CLICK:
-        minV = Tools->updnFloat(minV, below, above, -0.1f);
+        minV = Tools->updnFloat(minV, dn, up, -0.1f);
         break;
       default:;
     }

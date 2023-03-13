@@ -6,13 +6,13 @@
 namespace MCccv
 {
   struct MConst
-  {                               // 20230204
-    static constexpr float fixedKpV = 0.100f;     //0.06f;    //  15
-    static constexpr float fixedKiV = 0.240f;     //0.40f;    // 
-    static constexpr float fixedKdV = 0.000f;     //0.00f;    //   0 0x0000
-    static constexpr float fixedKpI = 0.100f;     //0.08f;    //  20
-    static constexpr float fixedKiI = 0.240f;     //0.40f;    //  
-    static constexpr float fixedKdI = 0.000f;     //0.00f;    //   0 0x0000  
+  {                               // 20230311     20230204
+    static constexpr float fixedKpV =  1.0;       //0.100f;
+    static constexpr float fixedKiV =  1.8;       //0.240f;
+    static constexpr float fixedKdV =  0.1;       //0.000f;
+    static constexpr float fixedKpI =  1.0;       //0.100f;
+    static constexpr float fixedKiI =  1.8;       //0.240f;
+    static constexpr float fixedKdI =  0.1;       //0.000f;
   };
 
     // Режимы работы PID-регулятора
@@ -52,8 +52,8 @@ namespace MCccv
       MState * fsm() override;
     private:
         // Пределы регулирования max тока
-      static constexpr float above = 6.0f;
-      static constexpr float below = 0.2f;
+      static constexpr float up = 3.0f;
+      static constexpr float dn = 0.2f;
   };
   
   class MSetVoltageMax : public MState
@@ -63,8 +63,8 @@ namespace MCccv
       MState * fsm() override;
     private:
         // Пределы регулирования max напряжения
-      static constexpr float above = 14.4f;
-      static constexpr float below = 10.0f;
+      static constexpr float up = 14.4f;
+      static constexpr float dn = 10.0f;
   };
 
   class MSetCurrentMin : public MState
@@ -74,8 +74,8 @@ namespace MCccv
       MState * fsm() override;
     private:
         // Пределы регулирования min тока
-      static constexpr float above = 2.0f;
-      static constexpr float below = 0.2f;
+      static constexpr float up = 2.0f;
+      static constexpr float dn = 0.2f;
   };
 
   class MSetVoltageMin : public MState
@@ -85,8 +85,8 @@ namespace MCccv
       MState * fsm() override;
     private:
         // Пределы регулирования min напряжения
-      static constexpr float above = 13.2f;
-      static constexpr float below = 10.0f;
+      static constexpr float up = 13.2f;
+      static constexpr float dn = 10.0f;
   };
 
   class MPostpone : public MState

@@ -1,13 +1,13 @@
 /*
-  project:      MKlon2v5a                               -> MKlon2.8
-  pcb:          MKlon2v5a->               -> MKlon2v7a  -> MKlon2v8
-  pcb:          no                                      -> v7a
+  project:      MKlon2v5a                    -> MKlon2.8
+  pcb:                         -> MKlon2v7a  
+  pcb:          no             -> v7a
   display:      128*160 IC: ST7735
   driver:       SAMD21 M0 MINI
-  date:         2022 декабрь              -> 20220126   -> 20220227
-  C/C++:                                  -> 1.13.9     -> 2.0.0
-  VS:                                     -> 1.74.3     -> 1.75.0
-  Espressif 32: 3.5.0 (с 4.0 не совместимо) -> 3.5.0
+  date:         2022 декабрь   -> 20220126   -> 20230312
+  C/C++:                       -> 1.13.9     -> 2.0.0
+  VS:            -> 1.74.3     -> 1.75.0     -> 1.76.1
+  Espressif 32: 3.5.0 (с 4.0 не совместимо)  -> 3.5.0
 */
 
 #include "board/mboard.h"

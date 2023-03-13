@@ -63,8 +63,8 @@ namespace MIPid
       MState * fsm() override;
     private:
       // min/max для задания тока
-      static constexpr float up = 5.5f;
-      static constexpr float dn = 0.1f; 
+      static constexpr float up = 5.50f;
+      static constexpr float dn = 0.05f; 
   };
 
   //========== MLoadKp, ввод параметра KP PID-регулятора тока =============== 
@@ -74,8 +74,8 @@ namespace MIPid
       MLoadKp(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up =  2.00f;
-      static constexpr float dn =  0.00f; 
+      static constexpr float up = 10.0f;
+      static constexpr float dn =  0.0f; 
   };
 
   //========== MLoadKi, ввод параметра KI PID-регулятора тока =============== 
@@ -85,8 +85,8 @@ namespace MIPid
       MLoadKi(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up =  2.00f;
-      static constexpr float dn =  0.00f;
+      static constexpr float up = 10.0f;
+      static constexpr float dn =  0.0f;
   };
 
   //========== MLoadKd, ввод параметра KD PID-регулятора тока =============== 
@@ -96,8 +96,8 @@ namespace MIPid
       MLoadKd(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up =  2.00f;
-      static constexpr float dn =  0.00f;
+      static constexpr float up = 10.0f;
+      static constexpr float dn =  0.0f;
   };
 
   //========== MSaveProf, сохранение профиля под выбранным номером ========== 

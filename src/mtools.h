@@ -347,6 +347,16 @@ class MTools
     unsigned short getStatusPidCurrent() {return status_pid_current;}
     unsigned short getStatusPidDiscurrent() {return status_pid_discurrent;}
 
+
+    // Дисплей 20230311
+
+    void showAmp(float amp, uint8_t pls);
+    void showAmp(float amp, uint8_t pls, short filtr);
+
+
+
+
+
   private:
     //==== PRIVATE ==== PRIVATE ==== PRIVATE ==== PRIVATE ==== PRIVATE ==== PRIVATE ==== PRIVATE ====
 
