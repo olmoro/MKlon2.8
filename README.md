@@ -324,6 +324,7 @@ float readVoltage( int adc ) {
 MKlon2. Как это работает. Результат работы модулей ESP32-WROOM-32D и SAMD21-MINI в паре 
 по ПИД-регулированию.
 
+Что имеем:
 - ADC - 12-bit, 350ksps;
 - PWM -  9-bit, 190kHz;
 - PID - 200Hz;
