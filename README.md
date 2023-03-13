@@ -335,12 +335,19 @@ MKlon2. Как это работает. Результат работы моду
 
 Режим Current Constant [CC I=4.2A](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CC_4200mA.png)
 
-Режим Current Constant ![CC I=5.2A](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CC_5200mA.png)
+Режим Current Constant [CC I=5.2A](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CC_5200mA.png)
+![](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CC_5200mA.png)
 
 Режим Current Constant [CC I=0.2A](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CC_0200mA.png)
 
-Режим Current Constant ![CC I=0.05A](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CC_0050mA.png)
+Режим Current Constant [CC I=0.05A](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CC_0050mA.png)
+![](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CC_0050mA.png)
 
+Скучно, девочки - как под копирку: плюс-минус 1 миллиампер.
+
+Режим Constant Voltage [CV V=14.0V](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CV_14000mV_3.png)
+![](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CV_14000mV_3.png)
+И пришла в голову идея: добавить в функцию вывода на дисплей и браузер наряду с током и количеством знаков после запятой ещё третий параметр - степень фильтрации (усреднения) если не хочется быть свидетелем интимных подробностей физико-химических процессов в виде скачков тока, протекающего при заряде.  
 
 ***
 MKlon2. Как это работает. Реализация FSM кратко на примере одного состояния.
