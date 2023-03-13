@@ -320,6 +320,29 @@ float readVoltage( int adc ) {
 
 Таймер РВ
 ***
+
+MKlon2. Как это работает. Результат работы модулей ESP32-WROOM-32D и SAMD21-MINI в паре 
+по ПИД-регулированию.
+
+ADC - 12-bit, 350ksps;
+PWM -  9-bit, 190kHz;
+PID - 200Hz; 
+AKB - HYUNDAI 85BR60K 12V / 55Ah (20HR) / 90Min (RC) / 550 (CCA)
+
+Режим Current Constant [CC I=2.2A](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CC_2200mA.png)
+
+Режим Current Constant [CC I=3.2A](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CC_3200mA.png)
+
+Режим Current Constant [CC I=4.2A](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CC_4200mA.png)
+
+Режим Current Constant [CC I=5.2A](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CC_5200mA.png)
+
+Режим Current Constant [CC I=0.2A](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CC_0200mA.png)
+
+Режим Current Constant [CC I=0.05A](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/20230312/CC_0050mA.png)
+
+
+***
 MKlon2. Как это работает. Реализация FSM кратко на примере одного состояния.
 
 [FSM](https://github.com/olmoro/MKlon2.8/blob/main/src/modes/cccv.txt)
