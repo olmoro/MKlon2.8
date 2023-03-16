@@ -14,9 +14,9 @@ namespace MIPid
     static constexpr float fixedSpI   =  0.5;
     static constexpr short fixedMode  = MODE_I;
       // 
-    static constexpr float fixedKpI =  0.56f;
-    static constexpr float fixedKiI =  1.79f;
-    static constexpr float fixedKdI =  0.09f;
+    static constexpr float fixedKpI =  0.20f;
+    static constexpr float fixedKiI =  0.20f;
+    static constexpr float fixedKdI =  0.10f;
   };
 
   //========== MStart, инициализация ========================================
@@ -74,8 +74,8 @@ namespace MIPid
       MLoadKp(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up = 10.0f;
-      static constexpr float dn =  0.0f; 
+      static constexpr float up = 0.24f;
+      static constexpr float dn = 0.01f; 
   };
 
   //========== MLoadKi, ввод параметра KI PID-регулятора тока =============== 
@@ -85,8 +85,8 @@ namespace MIPid
       MLoadKi(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up = 10.0f;
-      static constexpr float dn =  0.0f;
+      static constexpr float up = 0.24f;
+      static constexpr float dn = 0.00f;
   };
 
   //========== MLoadKd, ввод параметра KD PID-регулятора тока =============== 
@@ -96,8 +96,8 @@ namespace MIPid
       MLoadKd(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up = 10.0f;
-      static constexpr float dn =  0.0f;
+      static constexpr float up = 0.24f;
+      static constexpr float dn = 0.00f;
   };
 
   //========== MSaveProf, сохранение профиля под выбранным номером ========== 
