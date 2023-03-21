@@ -149,7 +149,9 @@ namespace MDevice
     default:;
     }
     Display->showVolt(Tools->getRealVoltage(), 3);
-    Display->showAmp (Tools->getRealCurrent(), 3);
+    //Display->showAmp (Tools->getRealCurrent(), 3);
+            Display->showPidV((float)shift, 0);
+
     return this;
   };  // MShiftV
 
@@ -195,12 +197,14 @@ namespace MDevice
     default:;
     }
     Display->showVolt(Tools->getRealVoltage(), 3);
-    Display->showAmp (Tools->getRealCurrent(), 3);
+    //Display->showAmp (Tools->getRealCurrent(), 3);
+        Display->showPidV((float)factor, 0);
+
     return this;  
   };  // MFactorV
 
   //========================================================================= MSmoothV
-    // Состояние: "Коррекция коэффициента фильтрации по току".
+    // Состояние: "Коррекция коэффициента фильтрации по напряжению".
   MSmoothV::MSmoothV(MTools * Tools) : MState(Tools)
   {
     smooth = Tools->readNvsShort("device", "smoothV", fixed);
@@ -224,14 +228,14 @@ namespace MDevice
     case MKeyboard::B_CLICK: Board->buzzerOn();
       Tools->writeNvsShort("device", "smoothV", smooth);                     return new MShiftI(Tools);
     case MKeyboard::UP_CLICK: Board->buzzerOn();
-      smooth = Tools->updnInt(smooth, below, above, +2); 
+      smooth = Tools->updnInt(smooth, below, above, +1); 
             #ifdef PRINTDEVICE
               Serial.print("smoothV=0x"); Serial.print(smooth, HEX);
             #endif
       Tools->txSetSmoothU(smooth);                                    // 0x34 Команда драйверу
       break;
     case MKeyboard::DN_CLICK: Board->buzzerOn();
-      smooth = Tools->updnInt(smooth, below, above, -2); 
+      smooth = Tools->updnInt(smooth, below, above, -1); 
             #ifdef PRINTDEVICE
               Serial.print("smoothV=0x"); Serial.print(smooth, HEX);
             #endif
@@ -240,7 +244,9 @@ namespace MDevice
     default:;
     }
     Display->showVolt(Tools->getRealVoltage(), 3);
-    Display->showAmp (Tools->getRealCurrent(), 3);
+    //Display->showAmp (Tools->getRealCurrent(), 3);
+        Display->showPidV((float)smooth, 0);
+
     return this;
   };  //MSmoothV
 
@@ -281,7 +287,9 @@ namespace MDevice
       break;
     default:;
     }
-    Display->showVolt(Tools->getRealVoltage(), 3);
+    //Display->showVolt(Tools->getRealVoltage(), 3);
+        Display->showPidI(shift, 0);
+
     Display->showAmp (Tools->getRealCurrent(), 3);
     return this;
   };  // MShiftI
@@ -325,7 +333,9 @@ namespace MDevice
       Tools->txSetFactorI(factor);                                            // 0x39 Команда драйверу
     default:;
     }
-    Display->showVolt(Tools->getRealVoltage(), 3);
+    //Display->showVolt(Tools->getRealVoltage(), 3);
+        Display->showPidI(factor, 0);
+
     Display->showAmp (Tools->getRealCurrent(), 3);
     return this;
   };  //MFactorI
@@ -355,14 +365,14 @@ namespace MDevice
     case MKeyboard::B_CLICK: Board->buzzerOn();
       Tools->writeNvsShort("device", "smoothI", smooth);               return new MPidFrequency(Tools);
     case MKeyboard::UP_CLICK: Board->buzzerOn();
-      smooth = Tools->updnInt(smooth, below, above, +2); 
+      smooth = Tools->updnInt(smooth, below, above, +1); 
       #ifdef PRINTDEVICE
         Serial.print("\nsmoothI=0x"); Serial.print(smooth, HEX);
       #endif           
       Tools->txSetSmoothI(smooth);                                            // 0x3C Команда драйверу
       break;
     case MKeyboard::DN_CLICK: Board->buzzerOn();
-      smooth = Tools->updnInt(smooth, below, above, -2); 
+      smooth = Tools->updnInt(smooth, below, above, -1); 
       #ifdef PRINTDEVICE
         Serial.print("\nsmoothI=0x"); Serial.print(smooth, HEX);
       #endif
@@ -370,7 +380,9 @@ namespace MDevice
       break;
     default:;
     }
-    Display->showVolt(Tools->getRealVoltage(), 3);
+    //Display->showVolt(Tools->getRealVoltage(), 3);
+        Display->showPidI(smooth, 0);
+
     Display->showAmp (Tools->getRealCurrent(), 3);
     return this;
   };  //MSmoothI

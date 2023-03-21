@@ -64,7 +64,7 @@ namespace MDevice
     private:
       short smooth;
       static constexpr short fixed = 4;
-      static constexpr short above = 8;
+      static constexpr short above = 6;
       static constexpr short below = 0;      
   };
 
@@ -100,7 +100,7 @@ namespace MDevice
     private:
       short smooth;
       static constexpr short fixed = 4;
-      static constexpr short above = 8;
+      static constexpr short above = 6;
       static constexpr short below = 0; 
   };
 
