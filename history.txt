@@ -265,3 +265,7 @@ Flash: [==        ]  18.9% (used 1237558 bytes from 6553600 bytes)
 
 defU 0x5326
 defI 0x7918
+
+18:00 23.03.2023
+MTools - Добавлен showVolts с фильтром    - OK
+ipidfsm - проверена фильтрация по току    - OK

@@ -257,6 +257,8 @@ namespace MIPid
       default:;
     }
       // Индикация, которая могла измениться при исполнении.
+    Tools->showAmp(Tools->getRealCurrent(), 3, 4);
+
     Display->showMode((char*)"  I-SP = ", sp);
     (Tools->getState() == Tools->getStatusPidCurrent()) ? 
                                     Board->ledsGreen() : Board->ledsRed();
@@ -310,7 +312,8 @@ namespace MIPid
       default:;
     }
     Display->showPidI(kp, 2);
-    Display->showAmp(Tools->getRealCurrent(), 3);
+    //Display->showAmp(Tools->getRealCurrent(), 3);
+    Tools->showAmp(Tools->getRealCurrent(), 3, 4);
     Display->showMode((char*)"        KP         ");
     (Tools->getState() == Tools->getStatusPidCurrent()) ? 
       Board->ledsGreen() : Board->ledsRed();
@@ -367,7 +370,8 @@ namespace MIPid
       default:;
     }
     Display->showPidI(ki, 2);
-    Display->showAmp(Tools->getRealCurrent(), 3);
+    //Display->showAmp(Tools->getRealCurrent(), 3);
+    Tools->showAmp(Tools->getRealCurrent(), 3, 4);
     Display->showMode((char*)"        KI         ");
     (Tools->getState() == Tools->getStatusPidCurrent()) ? 
       Board->ledsGreen() : Board->ledsRed();
@@ -420,7 +424,8 @@ namespace MIPid
       default:;
     }
     Display->showPidI(kd, 2);
-    Display->showAmp(Tools->getRealCurrent(), 3);
+    //Display->showAmp(Tools->getRealCurrent(), 3);
+    Tools->showAmp(Tools->getRealCurrent(), 3, 4);
     Display->showMode((char*)"        KD         ");
     (Tools->getState() == Tools->getStatusPidCurrent()) ? 
       Board->ledsGreen() : Board->ledsRed();
@@ -495,8 +500,10 @@ namespace MIPid
       case MKeyboard::C_CLICK:  Board->buzzerOn();        return new MExit(Tools);
     default:;
     }
-    Display->showVolt(Tools->getRealVoltage(), 3);
-    Display->showAmp (Tools->getRealCurrent(), 3);
+    //Display->showVolt(Tools->getRealVoltage(), 3);
+    //Display->showAmp (Tools->getRealCurrent(), 3);
+    Tools->showVolt(Tools->getRealVoltage(), 3, 2);
+    Tools->showAmp (Tools->getRealCurrent(), 3, 2);
     return this;
   };
 

@@ -504,8 +504,11 @@ Serial.print("ParamMult=0x");   Serial.println(Tools->getParamMult(), HEX);
     default:;
     }
     Display->showVolt(Tools->getRealVoltage(), 3);
+
+    
     //Display->showAmp (Tools->getRealCurrent(), 3);
     Tools->showAmp(Tools->getRealCurrent(), 3, 2);
+    //Tools->showAmp(Tools->getRealCurrent(), 3, 3);
     return this;
   };
 

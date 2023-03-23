@@ -353,6 +353,8 @@ class MTools
     void showAmp(float amp, uint8_t pls);
     void showAmp(float amp, uint8_t pls, short filtr);
 
+    void showVolt(float volt, uint8_t pls);
+    void showVolt(float volt, uint8_t pls, short filtr);
 
 
 

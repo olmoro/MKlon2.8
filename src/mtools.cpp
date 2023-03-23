@@ -2,9 +2,7 @@
     Набор методов, доступных разработчику для программирования собственных
  режимов работы прибора.
 
-              !!!!!!!!!!!!!!!!!!!!!!!!!!!! 2022 август
-    Продолжается очистка от мусора проекта-прототипа, который был без драйвера.
-    20230308          
+    20230323          
 */
 
 #include "mtools.h"
@@ -493,4 +491,15 @@ void MTools::showAmp(float amp, uint8_t pls, short filtr)
 {
   beautyI = filtr;
   Display->showAmp(amp, pls);
+}
+
+void MTools::showVolt(float volt, uint8_t pls)
+{
+  Display->showVolt(volt, pls);
+}
+
+void MTools::showVolt(float volt, uint8_t pls, short filtr)
+{
+  beautyV = filtr;
+  Display->showVolt(volt, pls);
 }
