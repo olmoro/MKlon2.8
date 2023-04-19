@@ -106,7 +106,7 @@ SAMD21. Напряжение и ток в физических единицах 
 на дисплее, так и браузере.
 
 ***
- Измерители.
+Измерители.
 ![](https://github.com/olmoro/MKlon2.8/blob/main/Documents/Img/ui_measure.png)
 
 MKlon2. Как это работает.
