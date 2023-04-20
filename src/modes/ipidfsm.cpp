@@ -262,7 +262,11 @@ namespace MIPid
     Display->showMode((char*)"  I-SP = ", sp);
     (Tools->getState() == Tools->getStatusPidCurrent()) ? 
                                     Board->ledsGreen() : Board->ledsRed();
-  //Serial.print("state=0x"); Serial.println(Tools->getState(), HEX);
+
+
+  Serial.print("state=0x"); Serial.println(Tools->getState(), HEX);
+
+  
     Display->showDuration(Tools->getChargeTimeCounter(), MDisplay::SEC);
     Display->showAh(Tools->getAhCharge());
     return this;

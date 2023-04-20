@@ -14,9 +14,9 @@ namespace MIPid
     static constexpr float fixedSpI   =  0.5;
     static constexpr short fixedMode  = MODE_I;
       // 
-    static constexpr float fixedKpI =  0.20f;
-    static constexpr float fixedKiI =  0.20f;
-    static constexpr float fixedKdI =  0.10f;
+    static constexpr float fixedKpI =  0.56f;
+    static constexpr float fixedKiI =  0.23f;
+    static constexpr float fixedKdI =  0.09f;
   };
 
   //========== MStart, инициализация ========================================
@@ -74,7 +74,7 @@ namespace MIPid
       MLoadKp(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up = 0.24f;
+      static constexpr float up = 1.00f;
       static constexpr float dn = 0.01f; 
   };
 
@@ -85,7 +85,7 @@ namespace MIPid
       MLoadKi(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up = 0.24f;
+      static constexpr float up = 1.00f;
       static constexpr float dn = 0.00f;
   };
 
@@ -96,7 +96,7 @@ namespace MIPid
       MLoadKd(MTools * Tools);
       MState * fsm() override;
     private:
-      static constexpr float up = 0.24f;
+      static constexpr float up = 1.00f;
       static constexpr float dn = 0.00f;
   };
 
